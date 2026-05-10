@@ -1,0 +1,642 @@
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f0f0f0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.98);
+  padding: 16px 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  z-index: 2000;
+}
+
+.controls-divider {
+  width: 1px;
+  height: 24px;
+  background: #e0e0e0;
+}
+
+.timer-container {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.timer {
+  font-size: 18px;
+  font-weight: 500;
+  color: #2196f3;
+}
+
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-start {
+  background: #4CAF50;
+  color: white;
+}
+
+.btn-stop {
+  background: #f44336;
+  color: white;
+}
+
+.btn-tasks {
+  background: #2196f3;
+  color: white;
+}
+
+.btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+}
+
+.modal-content {
+  background: #fff;
+  margin: 5vh auto;
+  padding: 32px;
+  border-radius: 12px;
+  max-width: 90vw;
+  width: 800px;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.close {
+  position: absolute;
+  right: 24px;
+  top: 24px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+}
+
+.tasks-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.tasks-table th,
+.tasks-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.tasks-table th {
+  background: #f5f5f5;
+  font-weight: 500;
+}
+
+.tasks-table tr:hover {
+  background: #f9f9f9;
+}
+
+.tasks-table a {
+  color: #2196F3;
+  text-decoration: none;
+}
+
+.tasks-table a:hover {
+  text-decoration: underline;
+}
+
+.video-container {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  padding: 24px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.container {
+  position: relative;
+  width: 480px;
+  height: 360px;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.camera-label {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  z-index: 1001;
+}
+
+.values-display {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  color: white;
+  font-size: 14px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  z-index: 1001;
+  background: rgba(0,0,0,0.5);
+  padding: 8px;
+  border-radius: 4px;
+}
+
+#video, #video2 {
+  width: 480px;
+  height: 360px;
+  object-fit: cover;
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 480px;
+  height: 360px;
+}
+
+#gazeCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 480px;
+  height: 360px;
+}
+
+#webgazerVideoContainer {
+  display: block !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  transform: rotateY(180deg) !important;
+  z-index: 1000 !important;
+  opacity: 1 !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  width: 480px !important;
+  height: 360px !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+  background-color: transparent !important;
+}
+
+#webgazerVideoFeed {
+  width: 480px !important;
+  height: 360px !important;
+  border-radius: 8px !important;
+  transform: scaleX(-1) !important;
+}
+
+#webgazerFaceOverlay {
+  width: 480px !important;
+  height: 360px !important;
+}
+
+#webgazerFaceFeedbackBox {
+  top: calc(40.8px * (4/3));
+  left: calc(80.8px * (4/3));
+  width: calc(158.4px * (4/3));
+  height: calc(158.4px * (4/3));
+}
+
+#selectedFilesList {
+  display: none;
+  position: fixed;
+  top: 70px;
+  margin: 12px 0 0 0;
+  min-width: 320px;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  font-size: 14px;
+  min-height: 32px;
+  text-align: left;
+  z-index: 3000;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+#selectedFilesList b {
+  display: block;
+  margin-bottom: 12px;
+  color: #333;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+#selectedFilesList ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#selectedFilesList li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  transition: all 0.2s ease;
+}
+
+#selectedFilesList li:hover {
+  background: #f0f2f5;
+}
+
+#selectedFilesList li:last-child {
+  margin-bottom: 0;
+}
+
+#selectedFilesList code {
+  background: #e9ecef;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 12px;
+  color: #495057;
+}
+
+#selectedFilesList button {
+  background: #e9ecef;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: #495057;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+#selectedFilesList button:hover {
+  background: #dee2e6;
+  color: #212529;
+}
+
+/* Силизация скроллбара */
+#selectedFilesList::-webkit-scrollbar {
+  width: 8px;
+}
+
+#selectedFilesList::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+#selectedFilesList::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+#selectedFilesList::-webkit-scrollbar-thumb:hover {
+  background: #bbb;
+}
+
+#calibrationAccuracy {
+  display: none;
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 1003;
+  font-size: 20px;
+}
+
+#webgazerLoading {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  background: #fff;
+  z-index: 1002;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#calibrationModal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+
+.calibration-modal-content {
+  background: #fff;
+  padding: 32px 24px;
+  border-radius: 12px;
+  max-width: 90vw;
+  min-width: 320px;
+  margin: auto;
+  text-align: center;
+  position: relative;
+  top: 20vh;
+}
+
+#calibrationModalText {
+  font-size: 20px;
+  margin-bottom: 24px;
+}
+
+/* Загрузчик */
+.loader {
+  margin-bottom: 16px;
+  width: 48px;
+  height: 48px;
+  border: 6px solid #eee;
+  border-top: 6px solid #2196f3;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Точки калибровки */
+.Calibration {
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  border: none;
+  border-radius: 50%;
+  position: fixed;
+  opacity: 0.2;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+#Pt1 { top: 2vh; left: 2vw; }
+#Pt2 { top: 2vh; left: 50vw; }
+#Pt3 { top: 2vh; left: 98vw; }
+#Pt4 { top: 50vh; left: 2vw; }
+#Pt5 { top: 50vh; left: 50vw; }
+#Pt6 { top: 50vh; left: 98vw; }
+#Pt7 { top: 98vh; left: 2vw; }
+#Pt8 { top: 98vh; left: 50vw; }
+#Pt9 { top: 98vh; left: 98vw; }
+
+#calibrationDiv {
+  z-index: 1001;
+}
+
+#plotting_canvas {
+  cursor: crosshair;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+}
+
+/* Список выбранных файлов */
+.files-container {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Отступ для контента под фиксированной панелью */
+.content-offset {
+  height: 80px;
+}
+
+/* Кнопки в модальном окне калибровки */
+#calibrationModalOk,
+#calibrationModalRetry {
+  margin: 0 8px;
+}
+
+#calibrationModalRetry {
+  display: none;
+}
+
+/* Загрузчик webgazer */
+#webgazerLoading {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  background: #fff;
+  z-index: 1002;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Инструкии по калибовке */
+.calibration-instructions {
+  max-width: 600px !important;
+}
+
+.calibration-instructions h2 {
+  color: #2196f3;
+  margin-top: 0;
+  margin-bottom: 24px;
+}
+
+.instructions-content {
+  margin-bottom: 24px;
+}
+
+.instructions-content p {
+  margin: 0 0 16px 0;
+  line-height: 1.5;
+  color: #333;
+}
+
+.instructions-content ol {
+  padding-left: 20px;
+  margin: 0 0 20px 0;
+}
+
+.instructions-content li {
+  margin-bottom: 12px;
+  line-height: 1.5;
+  color: #333;
+}
+
+.instructions-content strong {
+  color: #2196f3;
+  font-weight: 500;
+}
+
+.instructions-note {
+  background: #f8f9fa;
+  border-left: 4px solid #2196f3;
+  padding: 16px;
+  margin: 20px 0;
+  border-radius: 4px;
+}
+
+.instructions-note p {
+  margin: 0;
+}
+
+.calibration-instructions .btn {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  font-size: 16px;
+}
+
+/* Индикатор точности калибровки */
+.accuracy-indicator {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: help;
+  transition: all 0.2s ease;
+  background: #f8f9fa;
+  color: #6c757d;
+}
+
+.accuracy-indicator.high {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.accuracy-indicator.medium {
+  background: #fff3e0;
+  color: #ef6c00;
+}
+
+.accuracy-indicator.low {
+  background: #ffebee;
+  color: #c62828;
+}
+
+/* Стили для тултип */
+.accuracy-tooltip {
+  position: absolute;
+  background: #333;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  max-width: 250px;
+  z-index: 3000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.accuracy-tooltip.visible {
+  opacity: 1;
+}
+
+/* Увеличенная ширина модального окна для результатов */
+#resultsModal .modal-content {
+    max-width: 960px;
+    width: 96vw;
+    min-width: 340px;
+}
+
+.result-section {
+    max-width: 900px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.browser-comparison {
+    flex-wrap: wrap;
+    gap: 32px;
+}
+
+.browser-stats {
+    min-width: 260px;
+    max-width: 400px;
+    width: 100%;
+}
+
+@media (max-width: 1100px) {
+  #resultsModal .modal-content {
+    max-width: 99vw;
+    width: 99vw;
+  }
+  .result-section {
+    max-width: 99vw;
+  }
+}
+
+.custom-modal-content {
+    max-width: 960px;
+    width: 96vw;
+    min-width: 340px;
+}
+
+@media (max-width: 1100px) {
+  .custom-modal-content {
+    max-width: 99vw;
+    width: 99vw;
+  }
+} 

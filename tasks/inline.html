@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Быстрый заказ - Samsung Galaxy S25 Ultra</title>
+  <style>
+    :root { --primary: #2563eb; --success: #10b981; --error: #ef4444; --warning: #f59e0b; --bg: #f3f4f6; --text: #1f2937; --radius: 8px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 40px 20px; }
+    .wrapper { max-width: 800px; margin: 0 auto; }
+    
+    .header { text-align: center; color: #fff; margin-bottom: 30px; }
+    .header h1 { font-size: 32px; margin-bottom: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    .header p { opacity: 0.9; font-size: 16px; }
+    
+    .checkout-card { background: #fff; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+    
+    .product-banner { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); color: #fff; padding: 30px; display: flex; align-items: center; gap: 25px; }
+    .product-image { width: 100px; height: 140px; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 60px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    .product-details h2 { font-size: 24px; margin-bottom: 8px; }
+    .product-details .price-block { display: flex; align-items: center; gap: 15px; }
+    .product-details .current-price { font-size: 32px; font-weight: bold; color: #10b981; }
+    .product-details .old-price { font-size: 18px; color: #94a3b8; text-decoration: line-through; }
+    .product-details .discount { background: #ef4444; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 600; }
+    
+    .form-container { padding: 40px; }
+    .step-indicator { display: flex; justify-content: space-between; margin-bottom: 40px; position: relative; }
+    .step-indicator::before { content: ''; position: absolute; top: 20px; left: 0; right: 0; height: 2px; background: #e5e7eb; z-index: 0; }
+    .step { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .step-number { width: 40px; height: 40px; border-radius: 50%; background: #fff; border: 2px solid #e5e7eb; display: flex; align-items: center; justify-content: center; font-weight: 600; color: #6b7280; transition: all 0.3s; }
+    .step.active .step-number { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .step-label { font-size: 12px; color: #6b7280; font-weight: 500; }
+    .step.active .step-label { color: var(--primary); }
+    
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group.full-width { grid-column: 1 / -1; }
+    
+    .input-wrapper { position: relative; }
+    label { display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px; }
+    .required { color: var(--error); }
+    
+    input[type="text"], input[type="tel"], input[type="email"], select { 
+      width: 100%; 
+      padding: 14px 16px; 
+      border: 2px solid #e5e7eb; 
+      border-radius: var(--radius); 
+      font-size: 15px; 
+      transition: all 0.3s;
+      background: #f9fafb;
+    }
+    input:focus, select:focus { 
+      outline: none; 
+      border-color: var(--primary); 
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    input.error { 
+      border-color: var(--error); 
+      background: #fef2f2;
+    }
+    input.success {
+      border-color: var(--success);
+      background: #f0fdf4;
+    }
+    
+    .inline-error { 
+      display: block; 
+      color: var(--error); 
+      font-size: 13px; 
+      margin-top: 6px; 
+      min-height: 20px;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateY(-5px);
+      transition: all 0.3s;
+    }
+    .inline-error.visible { 
+      opacity: 1; 
+      transform: translateY(0);
+    }
+    .inline-error:empty { display: none; }
+    
+    .payment-methods { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 10px; }
+    .payment-option { 
+      position: relative; 
+      padding: 16px; 
+      border: 2px solid #e5e7eb; 
+      border-radius: var(--radius); 
+      cursor: pointer; 
+      text-align: center;
+      transition: all 0.3s;
+      background: #f9fafb;
+    }
+    .payment-option:hover { border-color: var(--primary); background: #eff6ff; }
+    .payment-option input { position: absolute; opacity: 0; }
+    .payment-option.selected { border-color: var(--primary); background: #eff6ff; }
+    .payment-icon { font-size: 32px; margin-bottom: 8px; display: block; }
+    .payment-label { font-size: 13px; font-weight: 600; color: #374151; }
+    
+    .checkbox-wrapper { display: flex; align-items: flex-start; gap: 12px; padding: 16px; background: #f9fafb; border-radius: var(--radius); margin-top: 20px; }
+    .checkbox-wrapper input[type="checkbox"] { 
+      width: 20px; 
+      height: 20px; 
+      margin-top: 2px; 
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+    .checkbox-wrapper label { 
+      margin: 0; 
+      font-weight: 400; 
+      font-size: 14px; 
+      color: #6b7280;
+      cursor: pointer;
+      line-height: 1.5;
+    }
+    
+    .submit-section { margin-top: 30px; }
+    .btn { 
+      padding: 16px 32px; 
+      border: none; 
+      border-radius: var(--radius); 
+      font-size: 16px; 
+      font-weight: 700; 
+      cursor: pointer; 
+      transition: all 0.3s;
+      width: 100%;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .btn-primary { 
+      background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%); 
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+    }
+    .btn-primary:hover { 
+      transform: translateY(-2px); 
+      box-shadow: 0 8px 25px rgba(37, 99, 235, 0.5);
+    }
+    .btn-primary:active { transform: translateY(0); }
+    
+    .security-badge { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 20px; color: #6b7280; font-size: 13px; }
+    .security-badge svg { width: 16px; height: 16px; }
+    
+    @media (max-width: 640px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .payment-methods { grid-template-columns: 1fr; }
+      .product-banner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <h1>🛒 Оформление заказа</h1>
+      <p>Заполните форму ниже для покупки Samsung Galaxy S25 Ultra</p>
+    </div>
+    
+    <div class="checkout-card">
+      <div class="product-banner">
+        <div class="product-image">📱</div>
+        <div class="product-details">
+          <h2>Samsung Galaxy S25 Ultra</h2>
+          <div class="price-block">
+            <span class="current-price">89 990 ₽</span>
+            <span class="old-price">109 990 ₽</span>
+            <span class="discount">-18%</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-container">
+        <div class="step-indicator">
+          <div class="step active">
+            <div class="step-number">1</div>
+            <div class="step-label">Контакты</div>
+          </div>
+          <div class="step active">
+            <div class="step-number">2</div>
+            <div class="step-label">Доставка</div>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-label">Оплата</div>
+          </div>
+        </div>
+
+        <form id="form-inline" novalidate>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Имя <span class="required">*</span></label>
+              <div class="input-wrapper">
+                <input type="text" name="name" placeholder="Введите ваше имя" required>
+                <span class="inline-error" id="err-inline-name"></span>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>Телефон <span class="required">*</span></label>
+              <div class="input-wrapper">
+                <input type="tel" name="phone" placeholder="+7 (___) ___-__-__" required>
+                <span class="inline-error" id="err-inline-phone"></span>
+              </div>
+            </div>
+            
+            <div class="form-group full-width">
+              <label>Email <span class="required">*</span></label>
+              <div class="input-wrapper">
+                <input type="email" name="email" placeholder="example@mail.ru" required>
+                <span class="inline-error" id="err-inline-email"></span>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>Город <span class="required">*</span></label>
+              <div class="input-wrapper">
+                <input type="text" name="city" placeholder="Москва" required>
+                <span class="inline-error" id="err-inline-city"></span>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>Индекс</label>
+              <div class="input-wrapper">
+                <input type="text" name="zip" placeholder="123456">
+                <span class="inline-error" id="err-inline-zip"></span>
+              </div>
+            </div>
+            
+            <div class="form-group full-width">
+              <label>Адрес доставки <span class="required">*</span></label>
+              <div class="input-wrapper">
+                <input type="text" name="address" placeholder="Улица, дом, квартира" required>
+                <span class="inline-error" id="err-inline-address"></span>
+              </div>
+            </div>
+            
+            <div class="form-group full-width">
+              <label>Способ оплаты <span class="required">*</span></label>
+              <div class="payment-methods" id="payment-group">
+                <label class="payment-option">
+                  <input type="radio" name="payment" value="card" required>
+                  <span class="payment-icon"></span>
+                  <span class="payment-label">Картой онлайн</span>
+                </label>
+                <label class="payment-option">
+                  <input type="radio" name="payment" value="cash">
+                  <span class="payment-icon"></span>
+                  <span class="payment-label">При получении</span>
+                </label>
+              </div>
+              <span class="inline-error" id="err-inline-payment"></span>
+            </div>
+            
+            <div class="form-group full-width">
+              <div class="checkbox-wrapper">
+                <input type="checkbox" name="agree" id="agree" required>
+                <label for="agree">Я согласен с <a href="#" style="color: var(--primary);">условиями договора</a> и <a href="#" style="color: var(--primary);">политикой обработки данных</a> <span class="required">*</span></label>
+              </div>
+              <span class="inline-error" id="err-inline-agree"></span>
+            </div>
+          </div>
+          
+          <div class="submit-section">
+            <button type="submit" class="btn btn-primary">Подтвердить заказ — 89 990 ₽</button>
+            <div class="security-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              <span>Безопасная оплата SSL-шифрование</span>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    // === ТРЕКЕР ОШИБОК ПО ПОЛЯМ ===
+    const inlineErrorTracker = {
+      name: { shown: false, shownAt: null, message: null },
+      phone: { shown: false, shownAt: null, message: null },
+      email: { shown: false, shownAt: null, message: null },
+      city: { shown: false, shownAt: null, message: null },
+      address: { shown: false, shownAt: null, message: null },
+      payment: { shown: false, shownAt: null, message: null },
+      agree: { shown: false, shownAt: null, message: null }
+    };
+
+    // === ФУНКЦИЯ ОТПРАВКИ СОБЫТИЙ ===
+    function logToParent(eventName, extraData = {}) {
+        if (window.parent && window.parent !== window) {
+            window.parent.postMessage({
+                type: 'experiment_event',
+                eventName: eventName,
+                timestamp: Date.now(),
+                taskId: 'phone_order_inline',
+                ui_type: 'inline_checkout',
+                ...extraData
+            }, '*');
+        }
+        console.log(` [${eventName}]`, extraData);
+    }
+
+    // === ПРАВИЛА ВАЛИДАЦИИ ===
+    const phoneRegex = /^[\d\s\-\+\(\)]{10,20}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    const rules = {
+      name: v => v && v.trim().length >= 2 ? null : 'Введите имя (минимум 2 символа)',
+      phone: v => v && phoneRegex.test(v) && v.replace(/\D/g,'').length >= 10 ? null : 'Введите корректный номер',
+      email: v => v && emailRegex.test(v) ? null : 'Введите корректный email',
+      city: v => v && v.trim().length >= 2 ? null : 'Укажите город',
+      address: v => v && v.trim().length >= 5 ? null : 'Укажите полный адрес',
+      payment: els => Array.from(els||[]).some(e=>e.checked) ? null : 'Выберите способ оплаты',
+      agree: v => v ? null : 'Необходимо согласие'
+    };
+
+    const $ = s => document.querySelector(s);
+    const $$ = s => document.querySelectorAll(s);
+    
+    // === МОДИФИЦИРОВАННАЯ showInlineError ===
+    const showInlineError = (field, msg, isGroup=false) => {
+      const err = $('#err-inline-' + field);
+      if (err) {
+        const wasVisible = err.classList.contains('visible');
+        const willBeVisible = !!msg;
+        
+        err.textContent = msg || '';
+        
+        if (willBeVisible && msg) {
+          err.classList.add('visible');
+        } else {
+          err.classList.remove('visible');
+        }
+        
+        // ЛОГИРУЕМ ПОЯВЛЕНИЕ ОШИБКИ
+        if (!wasVisible && willBeVisible && msg) {
+            inlineErrorTracker[field].shown = true;
+            inlineErrorTracker[field].shownAt = Date.now();
+            inlineErrorTracker[field].message = msg;
+            
+            logToParent('inline_error_shown', {
+                field: field,
+                message: msg,
+                element_id: 'err-inline-' + field
+            });
+        }
+        // ЛОГИРУЕМ ИСЧЕЗНОВЕНИЕ ОШИБКИ
+        else if (wasVisible && !willBeVisible && inlineErrorTracker[field].shown) {
+            const hiddenAt = Date.now();
+            const timeToFix = (hiddenAt - inlineErrorTracker[field].shownAt) / 1000;
+            
+            logToParent('inline_error_hidden', {
+                field: field,
+                previous_message: inlineErrorTracker[field].message,
+                time_to_fix_sec: parseFloat(timeToFix.toFixed(3)),
+                element_id: 'err-inline-' + field
+            });
+            
+            inlineErrorTracker[field].shown = false;
+            inlineErrorTracker[field].shownAt = null;
+            inlineErrorTracker[field].message = null;
+        }
+      }
+      
+      // Стили для полей
+      const input = $('#form-inline [name="' + field + '"]');
+      if (input) {
+        input.classList.remove('error', 'success');
+        if (msg) {
+          input.classList.add('error');
+        } else if (input.value.trim() && field !== 'agree') {
+          input.classList.add('success');
+        }
+      }
+      
+      // Для группы оплаты
+      if (isGroup) {
+        const paymentError = $('#err-inline-payment');
+        if (paymentError) {
+          if (msg) {
+            $$('#payment-group .payment-option').forEach(opt => opt.style.borderColor = 'var(--error)');
+          } else {
+            $$('#payment-group .payment-option').forEach(opt => opt.style.borderColor = '');
+          }
+        }
+      }
+    };
+
+    const setupInline = (field, selector, events, isGroup=false) => {
+      const el = $(selector);
+      if(!el) return;
+      
+      const validate = () => {
+        const val = isGroup ? $$(selector) : (el.type==='checkbox' ? el.checked : el.value);
+        const msg = rules[field](val);
+        showInlineError(field, msg, isGroup);
+      };
+      
+      events.split(' ').forEach(ev => {
+        if(isGroup) { 
+          $$(selector).forEach(x => x.addEventListener(ev, validate)); 
+        } else { 
+          el.addEventListener(ev, validate); 
+        }
+      });
+      return validate;
+    };
+    
+    setupInline('name', '#form-inline [name="name"]', 'blur input');
+    setupInline('phone', '#form-inline [name="phone"]', 'blur input');
+    setupInline('email', '#form-inline [name="email"]', 'blur input');
+    setupInline('city', '#form-inline [name="city"]', 'blur input');
+    setupInline('address', '#form-inline [name="address"]', 'blur input');
+    setupInline('agree', '#form-inline [name="agree"]', 'change');
+    setupInline('payment', '#form-inline [name="payment"]', 'change', true);
+
+    // Визуальный выбор оплаты
+    $$('#payment-group .payment-option').forEach(option => {
+      option.addEventListener('click', function() {
+        $$('#payment-group .payment-option').forEach(opt => opt.classList.remove('selected'));
+        this.classList.add('selected');
+        this.querySelector('input').checked = true;
+      });
+    });
+
+    // === МОДИФИЦИРОВАННЫЙ onsubmit ===
+    $('#form-inline').onsubmit = e => {
+      e.preventDefault();
+      const f = e.target;
+      
+      // ЛОГИРУЕМ НАЖАТИЕ КНОПКИ "ОТПРАВИТЬ"
+      logToParent('form_submit', {
+        form_data: { 
+          name_filled: f.name.value.trim().length > 0,
+          phone_filled: f.phone.value.trim().length > 0,
+          email_filled: f.email.value.trim().length > 0,
+          city_filled: f.city.value.trim().length > 0,
+          address_filled: f.address.value.trim().length > 0,
+          payment_selected: Array.from(f.payment || []).some(p => p.checked),
+          agree_checked: f.agree.checked
+        }  
+      }); 
+      
+      const nameErr = rules.name(f.name.value);
+      const phoneErr = rules.phone(f.phone.value);
+      const emailErr = rules.email(f.email.value);
+      const cityErr = rules.city(f.city.value);
+      const addressErr = rules.address(f.address.value);
+      const paymentErr = rules.payment(f.querySelectorAll('[name="payment"]'));
+      const agrErr = rules.agree(f.agree.checked);
+      
+      const errs = [nameErr, phoneErr, emailErr, cityErr, addressErr, paymentErr, agrErr].filter(Boolean);
+      
+      if (!errs.length) { 
+        alert('Заказ успешно оформлен! Мы свяжемся с вами в ближайшее время.'); 
+        f.reset(); 
+        showInlineError('name', '');
+        showInlineError('phone', '');
+        showInlineError('email', '');
+        showInlineError('city', '');
+        showInlineError('address', '');
+        showInlineError('payment', '', true);
+        showInlineError('agree', '');
+        $$('#form-inline input').forEach(i => i.classList.remove('success'));
+        
+        // ЛОГИРУЕМ УСПЕШНУЮ ОТПРАВКУ
+        logToParent('form_success', {
+          all_fields_valid: true
+        });
+      } else { 
+        showInlineError('name', nameErr);
+        showInlineError('phone', phoneErr);
+        showInlineError('email', emailErr);
+        showInlineError('city', cityErr);
+        showInlineError('address', addressErr);
+        showInlineError('payment', paymentErr, true);
+        showInlineError('agree', agrErr);
+        
+        // ЛОГИРУЕМ ОШИБКИ ПОСЛЕ ОТПРАВКИ
+        logToParent('validation_errors', {
+          error_count: errs.length,
+          errors: errs
+        });
+      }
+    };
+
+    // ЛОГИРУЕМ ЗАГРУЗКУ СТРАНИЦЫ
+    window.addEventListener('load', () => {
+        logToParent('page_loaded', {
+            page_url: window.location.pathname
+        });
+    });
+  </script>
+</body>
+</html>

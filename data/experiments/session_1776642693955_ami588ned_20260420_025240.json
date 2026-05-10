@@ -1,0 +1,2650 @@
+{
+  "sessionId": "session_1776642693955_ami588ned",
+  "timestamp": 1776642693955,
+  "startTime": 1776642693955,
+  "endTime": 1776642759344,
+  "duration": 65389,
+  "screen": {
+    "width": 1290,
+    "height": 860,
+    "availWidth": 1290,
+    "availHeight": 812,
+    "pixelRatio": 1.75,
+    "viewport": {
+      "width": 1290,
+      "height": 725
+    }
+  },
+  "tasks": [
+    {
+      "id": "modal_window",
+      "description": "Задача: modal_window.html",
+      "startTime": 1776642699324,
+      "endTime": 1776642701407,
+      "duration": 2083,
+      "completed": true
+    },
+    {
+      "id": "modal_plashka",
+      "description": "Задача: unmodal.html",
+      "startTime": 1776642705444,
+      "endTime": 1776642707502,
+      "duration": 2058,
+      "completed": true
+    },
+    {
+      "id": "pretty_modal_validation",
+      "description": "Задача: modalka_pretty.html",
+      "startTime": 1776642710509,
+      "endTime": 1776642713370,
+      "duration": 2861,
+      "completed": true
+    },
+    {
+      "id": "inline_validation",
+      "description": "Задача: inline.html",
+      "startTime": 1776642728707,
+      "endTime": 1776642757615,
+      "duration": 28908,
+      "completed": true
+    }
+  ],
+  "currentTaskId": null,
+  "gazeData": [
+    {
+      "timestamp": 1776642699400,
+      "taskId": "modal_window",
+      "pageUrl": "tasks/modal_window.html",
+      "x": 674,
+      "y": 73,
+      "absoluteX": 674,
+      "absoluteY": 73,
+      "relativeTime": 5446
+    },
+    {
+      "timestamp": 1776642699564,
+      "taskId": "modal_window",
+      "pageUrl": "tasks/modal_window.html",
+      "x": 681,
+      "y": 409,
+      "absoluteX": 681,
+      "absoluteY": 409,
+      "relativeTime": 5609
+    },
+    {
+      "timestamp": 1776642699676,
+      "taskId": "modal_window",
+      "pageUrl": "tasks/modal_window.html",
+      "x": 513,
+      "y": -35,
+      "absoluteX": 513,
+      "absoluteY": -35,
+      "relativeTime": 5721
+    },
+    {
+      "timestamp": 1776642699783,
+      "taskId": "modal_window",
+      "pageUrl": "tasks/modal_window.html",
+      "x": 503,
+      "y": -40,
+      "absoluteX": 503,
+      "absoluteY": -40,
+      "relativeTime": 5829
+    },
+    {
+      "timestamp": 1776642699978,
+      "taskId": "modal_window",
+      "pageUrl": "tasks/modal_window.html",
+      "x": 546,
+      "y": 39,
+      "absoluteX": 546,
+      "absoluteY": 39,
+      "relativeTime": 6023
+    },
+    {
+      "timestamp": 1776642700350,
+      "taskId": "modal_window",
+      "pageUrl": "tasks/modal_window.html",
+      "x": 901,
+      "y": -165,
+      "absoluteX": 901,
+      "absoluteY": -165,
+      "relativeTime": 6403
+    },
+    {
+      "timestamp": 1776642700554,
+      "taskId": "modal_window",
+      "pageUrl": "tasks/modal_window.html",
+      "x": 782,
+      "y": -8,
+      "absoluteX": 782,
+      "absoluteY": -8,
+      "relativeTime": 6599
+    },
+    {
+      "timestamp": 1776642700854,
+      "taskId": "modal_window",
+      "pageUrl": "tasks/modal_window.html",
+      "x": 838,
+      "y": 206,
+      "absoluteX": 838,
+      "absoluteY": 206,
+      "relativeTime": 6899
+    },
+    {
+      "timestamp": 1776642701010,
+      "taskId": "modal_window",
+      "pageUrl": "tasks/modal_window.html",
+      "x": 594,
+      "y": 134,
+      "absoluteX": 594,
+      "absoluteY": 134,
+      "relativeTime": 7055
+    },
+    {
+      "timestamp": 1776642701229,
+      "taskId": "modal_window",
+      "pageUrl": "tasks/modal_window.html",
+      "x": 417,
+      "y": -42,
+      "absoluteX": 417,
+      "absoluteY": -42,
+      "relativeTime": 7274
+    },
+    {
+      "timestamp": 1776642701388,
+      "taskId": "modal_window",
+      "pageUrl": "tasks/modal_window.html",
+      "x": 689,
+      "y": 37,
+      "absoluteX": 689,
+      "absoluteY": 37,
+      "relativeTime": 7433
+    },
+    {
+      "timestamp": 1776642705512,
+      "taskId": "modal_plashka",
+      "pageUrl": "tasks/unmodal.html",
+      "x": 1056,
+      "y": 623,
+      "absoluteX": 1056,
+      "absoluteY": 623,
+      "relativeTime": 11557
+    },
+    {
+      "timestamp": 1776642705682,
+      "taskId": "modal_plashka",
+      "pageUrl": "tasks/unmodal.html",
+      "x": 892,
+      "y": 309,
+      "absoluteX": 892,
+      "absoluteY": 309,
+      "relativeTime": 11727
+    },
+    {
+      "timestamp": 1776642705841,
+      "taskId": "modal_plashka",
+      "pageUrl": "tasks/unmodal.html",
+      "x": 1090,
+      "y": 255,
+      "absoluteX": 1090,
+      "absoluteY": 255,
+      "relativeTime": 11886
+    },
+    {
+      "timestamp": 1776642706030,
+      "taskId": "modal_plashka",
+      "pageUrl": "tasks/unmodal.html",
+      "x": 899,
+      "y": 168,
+      "absoluteX": 899,
+      "absoluteY": 168,
+      "relativeTime": 12075
+    },
+    {
+      "timestamp": 1776642706157,
+      "taskId": "modal_plashka",
+      "pageUrl": "tasks/unmodal.html",
+      "x": 739,
+      "y": 124,
+      "absoluteX": 739,
+      "absoluteY": 124,
+      "relativeTime": 12202
+    },
+    {
+      "timestamp": 1776642706378,
+      "taskId": "modal_plashka",
+      "pageUrl": "tasks/unmodal.html",
+      "x": 689,
+      "y": 49,
+      "absoluteX": 689,
+      "absoluteY": 49,
+      "relativeTime": 12423
+    },
+    {
+      "timestamp": 1776642706517,
+      "taskId": "modal_plashka",
+      "pageUrl": "tasks/unmodal.html",
+      "x": 816,
+      "y": 21,
+      "absoluteX": 816,
+      "absoluteY": 21,
+      "relativeTime": 12562
+    },
+    {
+      "timestamp": 1776642706683,
+      "taskId": "modal_plashka",
+      "pageUrl": "tasks/unmodal.html",
+      "x": 1478,
+      "y": 454,
+      "absoluteX": 1478,
+      "absoluteY": 454,
+      "relativeTime": 12728
+    },
+    {
+      "timestamp": 1776642706818,
+      "taskId": "modal_plashka",
+      "pageUrl": "tasks/unmodal.html",
+      "x": 849,
+      "y": 38,
+      "absoluteX": 849,
+      "absoluteY": 38,
+      "relativeTime": 12863
+    },
+    {
+      "timestamp": 1776642706950,
+      "taskId": "modal_plashka",
+      "pageUrl": "tasks/unmodal.html",
+      "x": 1455,
+      "y": 215,
+      "absoluteX": 1455,
+      "absoluteY": 215,
+      "relativeTime": 12995
+    },
+    {
+      "timestamp": 1776642707059,
+      "taskId": "modal_plashka",
+      "pageUrl": "tasks/unmodal.html",
+      "x": 1372,
+      "y": -32,
+      "absoluteX": 1372,
+      "absoluteY": -32,
+      "relativeTime": 13104
+    },
+    {
+      "timestamp": 1776642707222,
+      "taskId": "modal_plashka",
+      "pageUrl": "tasks/unmodal.html",
+      "x": 996,
+      "y": 73,
+      "absoluteX": 996,
+      "absoluteY": 73,
+      "relativeTime": 13267
+    },
+    {
+      "timestamp": 1776642707333,
+      "taskId": "modal_plashka",
+      "pageUrl": "tasks/unmodal.html",
+      "x": 1183,
+      "y": 215,
+      "absoluteX": 1183,
+      "absoluteY": 215,
+      "relativeTime": 13378
+    },
+    {
+      "timestamp": 1776642707417,
+      "taskId": "modal_plashka",
+      "pageUrl": "tasks/unmodal.html",
+      "x": 842,
+      "y": 244,
+      "absoluteX": 842,
+      "absoluteY": 244,
+      "relativeTime": 13462
+    },
+    {
+      "timestamp": 1776642710574,
+      "taskId": "pretty_modal_validation",
+      "pageUrl": "tasks/modalka_pretty.html",
+      "x": 863,
+      "y": 567,
+      "absoluteX": 863,
+      "absoluteY": 567,
+      "relativeTime": 16619
+    },
+    {
+      "timestamp": 1776642710704,
+      "taskId": "pretty_modal_validation",
+      "pageUrl": "tasks/modalka_pretty.html",
+      "x": 647,
+      "y": 543,
+      "absoluteX": 647,
+      "absoluteY": 543,
+      "relativeTime": 16749
+    },
+    {
+      "timestamp": 1776642710812,
+      "taskId": "pretty_modal_validation",
+      "pageUrl": "tasks/modalka_pretty.html",
+      "x": 733,
+      "y": 369,
+      "absoluteX": 733,
+      "absoluteY": 369,
+      "relativeTime": 16857
+    },
+    {
+      "timestamp": 1776642711080,
+      "taskId": "pretty_modal_validation",
+      "pageUrl": "tasks/modalka_pretty.html",
+      "x": 767,
+      "y": 209,
+      "absoluteX": 767,
+      "absoluteY": 209,
+      "relativeTime": 17125
+    },
+    {
+      "timestamp": 1776642711205,
+      "taskId": "pretty_modal_validation",
+      "pageUrl": "tasks/modalka_pretty.html",
+      "x": 607,
+      "y": 167,
+      "absoluteX": 607,
+      "absoluteY": 167,
+      "relativeTime": 17250
+    },
+    {
+      "timestamp": 1776642711427,
+      "taskId": "pretty_modal_validation",
+      "pageUrl": "tasks/modalka_pretty.html",
+      "x": 744,
+      "y": 115,
+      "absoluteX": 744,
+      "absoluteY": 115,
+      "relativeTime": 17472
+    },
+    {
+      "timestamp": 1776642711562,
+      "taskId": "pretty_modal_validation",
+      "pageUrl": "tasks/modalka_pretty.html",
+      "x": 626,
+      "y": 2,
+      "absoluteX": 626,
+      "absoluteY": 2,
+      "relativeTime": 17607
+    },
+    {
+      "timestamp": 1776642711714,
+      "taskId": "pretty_modal_validation",
+      "pageUrl": "tasks/modalka_pretty.html",
+      "x": 495,
+      "y": 336,
+      "absoluteX": 495,
+      "absoluteY": 336,
+      "relativeTime": 17759
+    },
+    {
+      "timestamp": 1776642711860,
+      "taskId": "pretty_modal_validation",
+      "pageUrl": "tasks/modalka_pretty.html",
+      "x": 467,
+      "y": 241,
+      "absoluteX": 467,
+      "absoluteY": 241,
+      "relativeTime": 17905
+    },
+    {
+      "timestamp": 1776642712007,
+      "taskId": "pretty_modal_validation",
+      "pageUrl": "tasks/modalka_pretty.html",
+      "x": 602,
+      "y": 220,
+      "absoluteX": 602,
+      "absoluteY": 499,
+      "relativeTime": 18052
+    },
+    {
+      "timestamp": 1776642712149,
+      "taskId": "pretty_modal_validation",
+      "pageUrl": "tasks/modalka_pretty.html",
+      "x": 712,
+      "y": 280,
+      "absoluteX": 712,
+      "absoluteY": 1086,
+      "relativeTime": 18194
+    },
+    {
+      "timestamp": 1776642712272,
+      "taskId": "pretty_modal_validation",
+      "pageUrl": "tasks/modalka_pretty.html",
+      "x": 440,
+      "y": 152,
+      "absoluteX": 440,
+      "absoluteY": 958,
+      "relativeTime": 18317
+    },
+    {
+      "timestamp": 1776642712345,
+      "taskId": "pretty_modal_validation",
+      "pageUrl": "tasks/modalka_pretty.html",
+      "x": 923,
+      "y": 340,
+      "absoluteX": 923,
+      "absoluteY": 1146,
+      "relativeTime": 18390
+    },
+    {
+      "timestamp": 1776642712487,
+      "taskId": "pretty_modal_validation",
+      "pageUrl": "tasks/modalka_pretty.html",
+      "x": 973,
+      "y": 354,
+      "absoluteX": 973,
+      "absoluteY": 1160,
+      "relativeTime": 18532
+    },
+    {
+      "timestamp": 1776642712584,
+      "taskId": "pretty_modal_validation",
+      "pageUrl": "tasks/modalka_pretty.html",
+      "x": 834,
+      "y": 60,
+      "absoluteX": 834,
+      "absoluteY": 866,
+      "relativeTime": 18629
+    },
+    {
+      "timestamp": 1776642712629,
+      "taskId": "pretty_modal_validation",
+      "pageUrl": "tasks/modalka_pretty.html",
+      "x": 1048,
+      "y": 87,
+      "absoluteX": 1048,
+      "absoluteY": 893,
+      "relativeTime": 18674
+    },
+    {
+      "timestamp": 1776642712735,
+      "taskId": "pretty_modal_validation",
+      "pageUrl": "tasks/modalka_pretty.html",
+      "x": 1017,
+      "y": -28,
+      "absoluteX": 1017,
+      "absoluteY": 778,
+      "relativeTime": 18780
+    },
+    {
+      "timestamp": 1776642712912,
+      "taskId": "pretty_modal_validation",
+      "pageUrl": "tasks/modalka_pretty.html",
+      "x": 1050,
+      "y": 42,
+      "absoluteX": 1050,
+      "absoluteY": 848,
+      "relativeTime": 18957
+    },
+    {
+      "timestamp": 1776642713029,
+      "taskId": "pretty_modal_validation",
+      "pageUrl": "tasks/modalka_pretty.html",
+      "x": 1060,
+      "y": 65,
+      "absoluteX": 1060,
+      "absoluteY": 871,
+      "relativeTime": 19074
+    },
+    {
+      "timestamp": 1776642713120,
+      "taskId": "pretty_modal_validation",
+      "pageUrl": "tasks/modalka_pretty.html",
+      "x": 1035,
+      "y": 125,
+      "absoluteX": 1035,
+      "absoluteY": 931,
+      "relativeTime": 19165
+    },
+    {
+      "timestamp": 1776642713262,
+      "taskId": "pretty_modal_validation",
+      "pageUrl": "tasks/modalka_pretty.html",
+      "x": 918,
+      "y": 235,
+      "absoluteX": 918,
+      "absoluteY": 1041,
+      "relativeTime": 19307
+    },
+    {
+      "timestamp": 1776642728843,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1017,
+      "y": 570,
+      "absoluteX": 1017,
+      "absoluteY": 570,
+      "relativeTime": 34888
+    },
+    {
+      "timestamp": 1776642728957,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 713,
+      "y": 396,
+      "absoluteX": 713,
+      "absoluteY": 396,
+      "relativeTime": 35002
+    },
+    {
+      "timestamp": 1776642729070,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1154,
+      "y": 442,
+      "absoluteX": 1154,
+      "absoluteY": 442,
+      "relativeTime": 35115
+    },
+    {
+      "timestamp": 1776642729392,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1103,
+      "y": 136,
+      "absoluteX": 1103,
+      "absoluteY": 136,
+      "relativeTime": 35437
+    },
+    {
+      "timestamp": 1776642729535,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1108,
+      "y": 230,
+      "absoluteX": 1108,
+      "absoluteY": 230,
+      "relativeTime": 35580
+    },
+    {
+      "timestamp": 1776642729611,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1056,
+      "y": 219,
+      "absoluteX": 1056,
+      "absoluteY": 219,
+      "relativeTime": 35656
+    },
+    {
+      "timestamp": 1776642729778,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 810,
+      "y": 654,
+      "absoluteX": 810,
+      "absoluteY": 654,
+      "relativeTime": 35823
+    },
+    {
+      "timestamp": 1776642729914,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 713,
+      "y": 463,
+      "absoluteX": 713,
+      "absoluteY": 463,
+      "relativeTime": 35959
+    },
+    {
+      "timestamp": 1776642730058,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 824,
+      "y": 496,
+      "absoluteX": 824,
+      "absoluteY": 496,
+      "relativeTime": 36103
+    },
+    {
+      "timestamp": 1776642730231,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 814,
+      "y": 339,
+      "absoluteX": 814,
+      "absoluteY": 339,
+      "relativeTime": 36276
+    },
+    {
+      "timestamp": 1776642730304,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 737,
+      "y": 719,
+      "absoluteX": 737,
+      "absoluteY": 719,
+      "relativeTime": 36349
+    },
+    {
+      "timestamp": 1776642730441,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 840,
+      "y": 387,
+      "absoluteX": 840,
+      "absoluteY": 387,
+      "relativeTime": 36486
+    },
+    {
+      "timestamp": 1776642730554,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 934,
+      "y": 633,
+      "absoluteX": 934,
+      "absoluteY": 633,
+      "relativeTime": 36599
+    },
+    {
+      "timestamp": 1776642730669,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 532,
+      "y": 604,
+      "absoluteX": 532,
+      "absoluteY": 604,
+      "relativeTime": 36714
+    },
+    {
+      "timestamp": 1776642730896,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 774,
+      "y": 342,
+      "absoluteX": 774,
+      "absoluteY": 342,
+      "relativeTime": 36941
+    },
+    {
+      "timestamp": 1776642731044,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 654,
+      "y": 388,
+      "absoluteX": 654,
+      "absoluteY": 388,
+      "relativeTime": 37089
+    },
+    {
+      "timestamp": 1776642731165,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 698,
+      "y": 1051,
+      "absoluteX": 698,
+      "absoluteY": 1051,
+      "relativeTime": 37210
+    },
+    {
+      "timestamp": 1776642731252,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 880,
+      "y": 468,
+      "absoluteX": 880,
+      "absoluteY": 468,
+      "relativeTime": 37297
+    },
+    {
+      "timestamp": 1776642731414,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1155,
+      "y": 473,
+      "absoluteX": 1155,
+      "absoluteY": 473,
+      "relativeTime": 37459
+    },
+    {
+      "timestamp": 1776642731478,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 421,
+      "y": 1025,
+      "absoluteX": 421,
+      "absoluteY": 1025,
+      "relativeTime": 37523
+    },
+    {
+      "timestamp": 1776642731548,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 88,
+      "y": 829,
+      "absoluteX": 88,
+      "absoluteY": 829,
+      "relativeTime": 37593
+    },
+    {
+      "timestamp": 1776642731767,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 864,
+      "y": 505,
+      "absoluteX": 864,
+      "absoluteY": 505,
+      "relativeTime": 37812
+    },
+    {
+      "timestamp": 1776642731887,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 268,
+      "y": 327,
+      "absoluteX": 268,
+      "absoluteY": 327,
+      "relativeTime": 37932
+    },
+    {
+      "timestamp": 1776642732065,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 582,
+      "y": 525,
+      "absoluteX": 582,
+      "absoluteY": 525,
+      "relativeTime": 38110
+    },
+    {
+      "timestamp": 1776642732195,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 759,
+      "y": 521,
+      "absoluteX": 759,
+      "absoluteY": 521,
+      "relativeTime": 38240
+    },
+    {
+      "timestamp": 1776642732325,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1021,
+      "y": 1000,
+      "absoluteX": 1021,
+      "absoluteY": 1000,
+      "relativeTime": 38370
+    },
+    {
+      "timestamp": 1776642732402,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 653,
+      "y": 832,
+      "absoluteX": 653,
+      "absoluteY": 832,
+      "relativeTime": 38447
+    },
+    {
+      "timestamp": 1776642732540,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1015,
+      "y": 260,
+      "absoluteX": 1015,
+      "absoluteY": 260,
+      "relativeTime": 38585
+    },
+    {
+      "timestamp": 1776642732667,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 272,
+      "y": 548,
+      "absoluteX": 272,
+      "absoluteY": 548,
+      "relativeTime": 38712
+    },
+    {
+      "timestamp": 1776642732749,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 395,
+      "y": 615,
+      "absoluteX": 395,
+      "absoluteY": 615,
+      "relativeTime": 38794
+    },
+    {
+      "timestamp": 1776642732897,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 641,
+      "y": 374,
+      "absoluteX": 641,
+      "absoluteY": 374,
+      "relativeTime": 38942
+    },
+    {
+      "timestamp": 1776642732975,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 363,
+      "y": 351,
+      "absoluteX": 363,
+      "absoluteY": 351,
+      "relativeTime": 39020
+    },
+    {
+      "timestamp": 1776642733046,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 867,
+      "y": 449,
+      "absoluteX": 867,
+      "absoluteY": 449,
+      "relativeTime": 39091
+    },
+    {
+      "timestamp": 1776642733168,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 552,
+      "y": 589,
+      "absoluteX": 552,
+      "absoluteY": 589,
+      "relativeTime": 39213
+    },
+    {
+      "timestamp": 1776642733295,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 575,
+      "y": 274,
+      "absoluteX": 575,
+      "absoluteY": 274,
+      "relativeTime": 39340
+    },
+    {
+      "timestamp": 1776642733423,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1003,
+      "y": 476,
+      "absoluteX": 1003,
+      "absoluteY": 476,
+      "relativeTime": 39468
+    },
+    {
+      "timestamp": 1776642733497,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 551,
+      "y": 542,
+      "absoluteX": 551,
+      "absoluteY": 542,
+      "relativeTime": 39542
+    },
+    {
+      "timestamp": 1776642733616,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 506,
+      "y": 1039,
+      "absoluteX": 506,
+      "absoluteY": 1039,
+      "relativeTime": 39661
+    },
+    {
+      "timestamp": 1776642733759,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 756,
+      "y": 582,
+      "absoluteX": 756,
+      "absoluteY": 582,
+      "relativeTime": 39804
+    },
+    {
+      "timestamp": 1776642733861,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 835,
+      "y": 163,
+      "absoluteX": 835,
+      "absoluteY": 163,
+      "relativeTime": 39907
+    },
+    {
+      "timestamp": 1776642733994,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 488,
+      "y": 631,
+      "absoluteX": 488,
+      "absoluteY": 631,
+      "relativeTime": 40039
+    },
+    {
+      "timestamp": 1776642734111,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 790,
+      "y": 131,
+      "absoluteX": 790,
+      "absoluteY": 131,
+      "relativeTime": 40156
+    },
+    {
+      "timestamp": 1776642734202,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 423,
+      "y": 215,
+      "absoluteX": 423,
+      "absoluteY": 215,
+      "relativeTime": 40247
+    },
+    {
+      "timestamp": 1776642734326,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 757,
+      "y": 416,
+      "absoluteX": 757,
+      "absoluteY": 416,
+      "relativeTime": 40371
+    },
+    {
+      "timestamp": 1776642734404,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 747,
+      "y": 775,
+      "absoluteX": 747,
+      "absoluteY": 775,
+      "relativeTime": 40449
+    },
+    {
+      "timestamp": 1776642734593,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 407,
+      "y": 324,
+      "absoluteX": 407,
+      "absoluteY": 324,
+      "relativeTime": 40638
+    },
+    {
+      "timestamp": 1776642734683,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1203,
+      "y": 540,
+      "absoluteX": 1203,
+      "absoluteY": 540,
+      "relativeTime": 40728
+    },
+    {
+      "timestamp": 1776642734913,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 866,
+      "y": 443,
+      "absoluteX": 866,
+      "absoluteY": 443,
+      "relativeTime": 40958
+    },
+    {
+      "timestamp": 1776642735042,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 508,
+      "y": 597,
+      "absoluteX": 508,
+      "absoluteY": 597,
+      "relativeTime": 41087
+    },
+    {
+      "timestamp": 1776642735176,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 219,
+      "y": 417,
+      "absoluteX": 219,
+      "absoluteY": 417,
+      "relativeTime": 41221
+    },
+    {
+      "timestamp": 1776642735322,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 401,
+      "y": 362,
+      "absoluteX": 401,
+      "absoluteY": 362,
+      "relativeTime": 41367
+    },
+    {
+      "timestamp": 1776642735474,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 785,
+      "y": 562,
+      "absoluteX": 785,
+      "absoluteY": 562,
+      "relativeTime": 41519
+    },
+    {
+      "timestamp": 1776642735627,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 385,
+      "y": 280,
+      "absoluteX": 385,
+      "absoluteY": 280,
+      "relativeTime": 41672
+    },
+    {
+      "timestamp": 1776642735773,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 398,
+      "y": 659,
+      "absoluteX": 398,
+      "absoluteY": 659,
+      "relativeTime": 41818
+    },
+    {
+      "timestamp": 1776642735916,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 588,
+      "y": 1059,
+      "absoluteX": 588,
+      "absoluteY": 1059,
+      "relativeTime": 41961
+    },
+    {
+      "timestamp": 1776642736088,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 284,
+      "y": 557,
+      "absoluteX": 284,
+      "absoluteY": 557,
+      "relativeTime": 42133
+    },
+    {
+      "timestamp": 1776642736298,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 590,
+      "y": 721,
+      "absoluteX": 590,
+      "absoluteY": 721,
+      "relativeTime": 42343
+    },
+    {
+      "timestamp": 1776642736439,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 313,
+      "y": 715,
+      "absoluteX": 313,
+      "absoluteY": 715,
+      "relativeTime": 42484
+    },
+    {
+      "timestamp": 1776642736526,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 361,
+      "y": 623,
+      "absoluteX": 361,
+      "absoluteY": 623,
+      "relativeTime": 42571
+    },
+    {
+      "timestamp": 1776642736770,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 581,
+      "y": 953,
+      "absoluteX": 581,
+      "absoluteY": 953,
+      "relativeTime": 42815
+    },
+    {
+      "timestamp": 1776642736967,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1026,
+      "y": 538,
+      "absoluteX": 1026,
+      "absoluteY": 538,
+      "relativeTime": 43012
+    },
+    {
+      "timestamp": 1776642737204,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 303,
+      "y": 650,
+      "absoluteX": 303,
+      "absoluteY": 650,
+      "relativeTime": 43249
+    },
+    {
+      "timestamp": 1776642737495,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 976,
+      "y": 458,
+      "absoluteX": 976,
+      "absoluteY": 458,
+      "relativeTime": 43540
+    },
+    {
+      "timestamp": 1776642737642,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 426,
+      "y": 246,
+      "absoluteX": 426,
+      "absoluteY": 246,
+      "relativeTime": 43687
+    },
+    {
+      "timestamp": 1776642737815,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 936,
+      "y": 583,
+      "absoluteX": 936,
+      "absoluteY": 583,
+      "relativeTime": 43860
+    },
+    {
+      "timestamp": 1776642737996,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 955,
+      "y": 670,
+      "absoluteX": 955,
+      "absoluteY": 670,
+      "relativeTime": 44041
+    },
+    {
+      "timestamp": 1776642738154,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 611,
+      "y": 636,
+      "absoluteX": 611,
+      "absoluteY": 636,
+      "relativeTime": 44199
+    },
+    {
+      "timestamp": 1776642738311,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 488,
+      "y": 822,
+      "absoluteX": 488,
+      "absoluteY": 822,
+      "relativeTime": 44356
+    },
+    {
+      "timestamp": 1776642738455,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 644,
+      "y": 637,
+      "absoluteX": 644,
+      "absoluteY": 637,
+      "relativeTime": 44500
+    },
+    {
+      "timestamp": 1776642738618,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 684,
+      "y": 450,
+      "absoluteX": 684,
+      "absoluteY": 450,
+      "relativeTime": 44663
+    },
+    {
+      "timestamp": 1776642738850,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 789,
+      "y": 282,
+      "absoluteX": 789,
+      "absoluteY": 282,
+      "relativeTime": 44895
+    },
+    {
+      "timestamp": 1776642738995,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 906,
+      "y": 651,
+      "absoluteX": 906,
+      "absoluteY": 651,
+      "relativeTime": 45040
+    },
+    {
+      "timestamp": 1776642739146,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 681,
+      "y": 1001,
+      "absoluteX": 681,
+      "absoluteY": 1001,
+      "relativeTime": 45191
+    },
+    {
+      "timestamp": 1776642739295,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 551,
+      "y": 397,
+      "absoluteX": 551,
+      "absoluteY": 397,
+      "relativeTime": 45340
+    },
+    {
+      "timestamp": 1776642739531,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 138,
+      "y": 374,
+      "absoluteX": 138,
+      "absoluteY": 374,
+      "relativeTime": 45576
+    },
+    {
+      "timestamp": 1776642739689,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 237,
+      "y": 502,
+      "absoluteX": 237,
+      "absoluteY": 502,
+      "relativeTime": 45734
+    },
+    {
+      "timestamp": 1776642739770,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 362,
+      "y": 733,
+      "absoluteX": 362,
+      "absoluteY": 733,
+      "relativeTime": 45815
+    },
+    {
+      "timestamp": 1776642739918,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 365,
+      "y": 869,
+      "absoluteX": 365,
+      "absoluteY": 869,
+      "relativeTime": 45963
+    },
+    {
+      "timestamp": 1776642740081,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 710,
+      "y": 5,
+      "absoluteX": 710,
+      "absoluteY": 5,
+      "relativeTime": 46126
+    },
+    {
+      "timestamp": 1776642740238,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 607,
+      "y": 229,
+      "absoluteX": 607,
+      "absoluteY": 229,
+      "relativeTime": 46283
+    },
+    {
+      "timestamp": 1776642740463,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 463,
+      "y": 92,
+      "absoluteX": 463,
+      "absoluteY": 92,
+      "relativeTime": 46508
+    },
+    {
+      "timestamp": 1776642740557,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 387,
+      "y": 809,
+      "absoluteX": 387,
+      "absoluteY": 809,
+      "relativeTime": 46602
+    },
+    {
+      "timestamp": 1776642740808,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 623,
+      "y": 454,
+      "absoluteX": 623,
+      "absoluteY": 454,
+      "relativeTime": 46853
+    },
+    {
+      "timestamp": 1776642740971,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 583,
+      "y": 769,
+      "absoluteX": 583,
+      "absoluteY": 769,
+      "relativeTime": 47016
+    },
+    {
+      "timestamp": 1776642741122,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 886,
+      "y": 312,
+      "absoluteX": 886,
+      "absoluteY": 312,
+      "relativeTime": 47167
+    },
+    {
+      "timestamp": 1776642741292,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 695,
+      "y": 449,
+      "absoluteX": 695,
+      "absoluteY": 449,
+      "relativeTime": 47337
+    },
+    {
+      "timestamp": 1776642741439,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 763,
+      "y": 414,
+      "absoluteX": 763,
+      "absoluteY": 414,
+      "relativeTime": 47484
+    },
+    {
+      "timestamp": 1776642741595,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 598,
+      "y": 151,
+      "absoluteX": 598,
+      "absoluteY": 151,
+      "relativeTime": 47640
+    },
+    {
+      "timestamp": 1776642741743,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 220,
+      "y": 909,
+      "absoluteX": 220,
+      "absoluteY": 909,
+      "relativeTime": 47788
+    },
+    {
+      "timestamp": 1776642741920,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 185,
+      "y": 604,
+      "absoluteX": 185,
+      "absoluteY": 604,
+      "relativeTime": 47965
+    },
+    {
+      "timestamp": 1776642742143,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 455,
+      "y": 150,
+      "absoluteX": 455,
+      "absoluteY": 150,
+      "relativeTime": 48188
+    },
+    {
+      "timestamp": 1776642742314,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 683,
+      "y": 45,
+      "absoluteX": 683,
+      "absoluteY": 45,
+      "relativeTime": 48359
+    },
+    {
+      "timestamp": 1776642742477,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 374,
+      "y": 593,
+      "absoluteX": 374,
+      "absoluteY": 593,
+      "relativeTime": 48522
+    },
+    {
+      "timestamp": 1776642742636,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1013,
+      "y": 1020,
+      "absoluteX": 1013,
+      "absoluteY": 1020,
+      "relativeTime": 48681
+    },
+    {
+      "timestamp": 1776642742818,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 386,
+      "y": 278,
+      "absoluteX": 386,
+      "absoluteY": 278,
+      "relativeTime": 48863
+    },
+    {
+      "timestamp": 1776642743044,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 635,
+      "y": 40,
+      "absoluteX": 635,
+      "absoluteY": 40,
+      "relativeTime": 49089
+    },
+    {
+      "timestamp": 1776642743203,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 746,
+      "y": 652,
+      "absoluteX": 746,
+      "absoluteY": 652,
+      "relativeTime": 49248
+    },
+    {
+      "timestamp": 1776642743346,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 823,
+      "y": 61,
+      "absoluteX": 823,
+      "absoluteY": 61,
+      "relativeTime": 49391
+    },
+    {
+      "timestamp": 1776642743499,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 330,
+      "y": 295,
+      "absoluteX": 330,
+      "absoluteY": 295,
+      "relativeTime": 49544
+    },
+    {
+      "timestamp": 1776642743685,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 589,
+      "y": 472,
+      "absoluteX": 589,
+      "absoluteY": 472,
+      "relativeTime": 49730
+    },
+    {
+      "timestamp": 1776642743922,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 413,
+      "y": 150,
+      "absoluteX": 413,
+      "absoluteY": 150,
+      "relativeTime": 49967
+    },
+    {
+      "timestamp": 1776642744072,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 660,
+      "y": 870,
+      "absoluteX": 660,
+      "absoluteY": 870,
+      "relativeTime": 50117
+    },
+    {
+      "timestamp": 1776642744154,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 838,
+      "y": 354,
+      "absoluteX": 838,
+      "absoluteY": 354,
+      "relativeTime": 50199
+    },
+    {
+      "timestamp": 1776642744313,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 905,
+      "y": 331,
+      "absoluteX": 905,
+      "absoluteY": 331,
+      "relativeTime": 50358
+    },
+    {
+      "timestamp": 1776642744538,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 649,
+      "y": 502,
+      "absoluteX": 649,
+      "absoluteY": 502,
+      "relativeTime": 50583
+    },
+    {
+      "timestamp": 1776642744619,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 643,
+      "y": 292,
+      "absoluteX": 643,
+      "absoluteY": 292,
+      "relativeTime": 50664
+    },
+    {
+      "timestamp": 1776642744766,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 626,
+      "y": 257,
+      "absoluteX": 626,
+      "absoluteY": 257,
+      "relativeTime": 50811
+    },
+    {
+      "timestamp": 1776642744921,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 90,
+      "y": 422,
+      "absoluteX": 90,
+      "absoluteY": 422,
+      "relativeTime": 50966
+    },
+    {
+      "timestamp": 1776642745145,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 693,
+      "y": 117,
+      "absoluteX": 693,
+      "absoluteY": 117,
+      "relativeTime": 51190
+    },
+    {
+      "timestamp": 1776642745288,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 593,
+      "y": 1035,
+      "absoluteX": 593,
+      "absoluteY": 1035,
+      "relativeTime": 51333
+    },
+    {
+      "timestamp": 1776642745432,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 494,
+      "y": 551,
+      "absoluteX": 494,
+      "absoluteY": 551,
+      "relativeTime": 51477
+    },
+    {
+      "timestamp": 1776642745509,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 121,
+      "y": 687,
+      "absoluteX": 121,
+      "absoluteY": 687,
+      "relativeTime": 51554
+    },
+    {
+      "timestamp": 1776642745749,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 572,
+      "y": 298,
+      "absoluteX": 572,
+      "absoluteY": 298,
+      "relativeTime": 51794
+    },
+    {
+      "timestamp": 1776642745905,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 912,
+      "y": 472,
+      "absoluteX": 912,
+      "absoluteY": 472,
+      "relativeTime": 51950
+    },
+    {
+      "timestamp": 1776642746061,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1062,
+      "y": 652,
+      "absoluteX": 1062,
+      "absoluteY": 652,
+      "relativeTime": 52106
+    },
+    {
+      "timestamp": 1776642746221,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 471,
+      "y": 206,
+      "absoluteX": 471,
+      "absoluteY": 206,
+      "relativeTime": 52266
+    },
+    {
+      "timestamp": 1776642746364,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 620,
+      "y": 503,
+      "absoluteX": 620,
+      "absoluteY": 503,
+      "relativeTime": 52409
+    },
+    {
+      "timestamp": 1776642746516,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 882,
+      "y": 672,
+      "absoluteX": 882,
+      "absoluteY": 672,
+      "relativeTime": 52561
+    },
+    {
+      "timestamp": 1776642746656,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 657,
+      "y": 619,
+      "absoluteX": 657,
+      "absoluteY": 619,
+      "relativeTime": 52701
+    },
+    {
+      "timestamp": 1776642746809,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 620,
+      "y": 467,
+      "absoluteX": 620,
+      "absoluteY": 467,
+      "relativeTime": 52854
+    },
+    {
+      "timestamp": 1776642746923,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 752,
+      "y": 452,
+      "absoluteX": 752,
+      "absoluteY": 452,
+      "relativeTime": 52968
+    },
+    {
+      "timestamp": 1776642746997,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 402,
+      "y": 702,
+      "absoluteX": 402,
+      "absoluteY": 702,
+      "relativeTime": 53042
+    },
+    {
+      "timestamp": 1776642747125,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 364,
+      "y": 452,
+      "absoluteX": 364,
+      "absoluteY": 452,
+      "relativeTime": 53170
+    },
+    {
+      "timestamp": 1776642747262,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 466,
+      "y": 212,
+      "absoluteX": 466,
+      "absoluteY": 212,
+      "relativeTime": 53307
+    },
+    {
+      "timestamp": 1776642747422,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 777,
+      "y": 177,
+      "absoluteX": 777,
+      "absoluteY": 177,
+      "relativeTime": 53467
+    },
+    {
+      "timestamp": 1776642747562,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 408,
+      "y": 581,
+      "absoluteX": 408,
+      "absoluteY": 581,
+      "relativeTime": 53607
+    },
+    {
+      "timestamp": 1776642747685,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1026,
+      "y": 759,
+      "absoluteX": 1026,
+      "absoluteY": 759,
+      "relativeTime": 53730
+    },
+    {
+      "timestamp": 1776642747791,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 653,
+      "y": 841,
+      "absoluteX": 653,
+      "absoluteY": 841,
+      "relativeTime": 53836
+    },
+    {
+      "timestamp": 1776642747927,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 431,
+      "y": 13,
+      "absoluteX": 431,
+      "absoluteY": 13,
+      "relativeTime": 53972
+    },
+    {
+      "timestamp": 1776642748122,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1090,
+      "y": 1187,
+      "absoluteX": 1090,
+      "absoluteY": 1187,
+      "relativeTime": 54167
+    },
+    {
+      "timestamp": 1776642748226,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 871,
+      "y": 327,
+      "absoluteX": 871,
+      "absoluteY": 327,
+      "relativeTime": 54271
+    },
+    {
+      "timestamp": 1776642748432,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 979,
+      "y": 901,
+      "absoluteX": 979,
+      "absoluteY": 901,
+      "relativeTime": 54477
+    },
+    {
+      "timestamp": 1776642748608,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1196,
+      "y": 556,
+      "absoluteX": 1196,
+      "absoluteY": 556,
+      "relativeTime": 54653
+    },
+    {
+      "timestamp": 1776642748755,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 934,
+      "y": 354,
+      "absoluteX": 934,
+      "absoluteY": 354,
+      "relativeTime": 54800
+    },
+    {
+      "timestamp": 1776642748892,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 409,
+      "y": 442,
+      "absoluteX": 409,
+      "absoluteY": 442,
+      "relativeTime": 54937
+    },
+    {
+      "timestamp": 1776642749023,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 475,
+      "y": 634,
+      "absoluteX": 475,
+      "absoluteY": 634,
+      "relativeTime": 55068
+    },
+    {
+      "timestamp": 1776642749129,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 463,
+      "y": 678,
+      "absoluteX": 463,
+      "absoluteY": 678,
+      "relativeTime": 55174
+    },
+    {
+      "timestamp": 1776642749381,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 410,
+      "y": 581,
+      "absoluteX": 410,
+      "absoluteY": 581,
+      "relativeTime": 55426
+    },
+    {
+      "timestamp": 1776642749499,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 595,
+      "y": 239,
+      "absoluteX": 595,
+      "absoluteY": 239,
+      "relativeTime": 55544
+    },
+    {
+      "timestamp": 1776642749642,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 390,
+      "y": 913,
+      "absoluteX": 390,
+      "absoluteY": 913,
+      "relativeTime": 55687
+    },
+    {
+      "timestamp": 1776642749770,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 363,
+      "y": 402,
+      "absoluteX": 363,
+      "absoluteY": 402,
+      "relativeTime": 55815
+    },
+    {
+      "timestamp": 1776642749881,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 263,
+      "y": 1025,
+      "absoluteX": 263,
+      "absoluteY": 1025,
+      "relativeTime": 55926
+    },
+    {
+      "timestamp": 1776642749960,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 957,
+      "y": 308,
+      "absoluteX": 957,
+      "absoluteY": 308,
+      "relativeTime": 56005
+    },
+    {
+      "timestamp": 1776642750053,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 908,
+      "y": 871,
+      "absoluteX": 908,
+      "absoluteY": 871,
+      "relativeTime": 56098
+    },
+    {
+      "timestamp": 1776642750168,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 726,
+      "y": 692,
+      "absoluteX": 726,
+      "absoluteY": 692,
+      "relativeTime": 56213
+    },
+    {
+      "timestamp": 1776642750242,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 617,
+      "y": 718,
+      "absoluteX": 617,
+      "absoluteY": 718,
+      "relativeTime": 56287
+    },
+    {
+      "timestamp": 1776642750345,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 677,
+      "y": 593,
+      "absoluteX": 677,
+      "absoluteY": 593,
+      "relativeTime": 56390
+    },
+    {
+      "timestamp": 1776642750459,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 676,
+      "y": 703,
+      "absoluteX": 676,
+      "absoluteY": 703,
+      "relativeTime": 56504
+    },
+    {
+      "timestamp": 1776642750642,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 698,
+      "y": 503,
+      "absoluteX": 698,
+      "absoluteY": 503,
+      "relativeTime": 56687
+    },
+    {
+      "timestamp": 1776642750717,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 723,
+      "y": 734,
+      "absoluteX": 723,
+      "absoluteY": 734,
+      "relativeTime": 56762
+    },
+    {
+      "timestamp": 1776642750847,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 675,
+      "y": 577,
+      "absoluteX": 675,
+      "absoluteY": 577,
+      "relativeTime": 56892
+    },
+    {
+      "timestamp": 1776642750954,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 545,
+      "y": -74,
+      "absoluteX": 545,
+      "absoluteY": -74,
+      "relativeTime": 56999
+    },
+    {
+      "timestamp": 1776642751019,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 998,
+      "y": 679,
+      "absoluteX": 998,
+      "absoluteY": 679,
+      "relativeTime": 57064
+    },
+    {
+      "timestamp": 1776642751143,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 849,
+      "y": 351,
+      "absoluteX": 849,
+      "absoluteY": 351,
+      "relativeTime": 57188
+    },
+    {
+      "timestamp": 1776642751252,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1419,
+      "y": 839,
+      "absoluteX": 1419,
+      "absoluteY": 839,
+      "relativeTime": 57297
+    },
+    {
+      "timestamp": 1776642751369,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 244,
+      "y": 154,
+      "absoluteX": 244,
+      "absoluteY": 154,
+      "relativeTime": 57414
+    },
+    {
+      "timestamp": 1776642751449,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 986,
+      "y": 224,
+      "absoluteX": 986,
+      "absoluteY": 224,
+      "relativeTime": 57494
+    },
+    {
+      "timestamp": 1776642751561,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 442,
+      "y": 563,
+      "absoluteX": 442,
+      "absoluteY": 563,
+      "relativeTime": 57606
+    },
+    {
+      "timestamp": 1776642751685,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 851,
+      "y": 750,
+      "absoluteX": 851,
+      "absoluteY": 750,
+      "relativeTime": 57730
+    },
+    {
+      "timestamp": 1776642751864,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 326,
+      "y": 298,
+      "absoluteX": 326,
+      "absoluteY": 298,
+      "relativeTime": 57909
+    },
+    {
+      "timestamp": 1776642751942,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 801,
+      "y": 674,
+      "absoluteX": 801,
+      "absoluteY": 674,
+      "relativeTime": 57987
+    },
+    {
+      "timestamp": 1776642752080,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1006,
+      "y": 306,
+      "absoluteX": 1006,
+      "absoluteY": 306,
+      "relativeTime": 58125
+    },
+    {
+      "timestamp": 1776642752226,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 568,
+      "y": 453,
+      "absoluteX": 568,
+      "absoluteY": 453,
+      "relativeTime": 58271
+    },
+    {
+      "timestamp": 1776642752355,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1393,
+      "y": 706,
+      "absoluteX": 1393,
+      "absoluteY": 706,
+      "relativeTime": 58400
+    },
+    {
+      "timestamp": 1776642752463,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 852,
+      "y": 799,
+      "absoluteX": 852,
+      "absoluteY": 799,
+      "relativeTime": 58508
+    },
+    {
+      "timestamp": 1776642752585,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 771,
+      "y": 760,
+      "absoluteX": 771,
+      "absoluteY": 760,
+      "relativeTime": 58630
+    },
+    {
+      "timestamp": 1776642752808,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 82,
+      "y": 682,
+      "absoluteX": 82,
+      "absoluteY": 682,
+      "relativeTime": 58853
+    },
+    {
+      "timestamp": 1776642752942,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1037,
+      "y": 824,
+      "absoluteX": 1037,
+      "absoluteY": 824,
+      "relativeTime": 58987
+    },
+    {
+      "timestamp": 1776642753061,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 944,
+      "y": 554,
+      "absoluteX": 944,
+      "absoluteY": 554,
+      "relativeTime": 59106
+    },
+    {
+      "timestamp": 1776642753123,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1325,
+      "y": 698,
+      "absoluteX": 1325,
+      "absoluteY": 698,
+      "relativeTime": 59168
+    },
+    {
+      "timestamp": 1776642753266,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 752,
+      "y": 543,
+      "absoluteX": 752,
+      "absoluteY": 543,
+      "relativeTime": 59311
+    },
+    {
+      "timestamp": 1776642753393,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 691,
+      "y": 128,
+      "absoluteX": 691,
+      "absoluteY": 128,
+      "relativeTime": 59438
+    },
+    {
+      "timestamp": 1776642753524,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 651,
+      "y": 195,
+      "absoluteX": 651,
+      "absoluteY": 195,
+      "relativeTime": 59569
+    },
+    {
+      "timestamp": 1776642753627,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 780,
+      "y": 693,
+      "absoluteX": 780,
+      "absoluteY": 693,
+      "relativeTime": 59672
+    },
+    {
+      "timestamp": 1776642753812,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 516,
+      "y": 209,
+      "absoluteX": 516,
+      "absoluteY": 209,
+      "relativeTime": 59857
+    },
+    {
+      "timestamp": 1776642753937,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1259,
+      "y": 529,
+      "absoluteX": 1259,
+      "absoluteY": 529,
+      "relativeTime": 59982
+    },
+    {
+      "timestamp": 1776642754006,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1142,
+      "y": 491,
+      "absoluteX": 1142,
+      "absoluteY": 491,
+      "relativeTime": 60051
+    },
+    {
+      "timestamp": 1776642754148,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1006,
+      "y": 483,
+      "absoluteX": 1006,
+      "absoluteY": 483,
+      "relativeTime": 60193
+    },
+    {
+      "timestamp": 1776642754284,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1247,
+      "y": 767,
+      "absoluteX": 1247,
+      "absoluteY": 767,
+      "relativeTime": 60329
+    },
+    {
+      "timestamp": 1776642754355,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1589,
+      "y": 664,
+      "absoluteX": 1589,
+      "absoluteY": 664,
+      "relativeTime": 60400
+    },
+    {
+      "timestamp": 1776642754482,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1445,
+      "y": 339,
+      "absoluteX": 1445,
+      "absoluteY": 339,
+      "relativeTime": 60527
+    },
+    {
+      "timestamp": 1776642754636,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1078,
+      "y": 477,
+      "absoluteX": 1078,
+      "absoluteY": 477,
+      "relativeTime": 60681
+    },
+    {
+      "timestamp": 1776642754789,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1220,
+      "y": 477,
+      "absoluteX": 1220,
+      "absoluteY": 477,
+      "relativeTime": 60834
+    },
+    {
+      "timestamp": 1776642754915,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 275,
+      "y": -22,
+      "absoluteX": 275,
+      "absoluteY": -22,
+      "relativeTime": 60960
+    },
+    {
+      "timestamp": 1776642755152,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 449,
+      "y": 321,
+      "absoluteX": 449,
+      "absoluteY": 321,
+      "relativeTime": 61197
+    },
+    {
+      "timestamp": 1776642755309,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 734,
+      "y": 823,
+      "absoluteX": 734,
+      "absoluteY": 823,
+      "relativeTime": 61354
+    },
+    {
+      "timestamp": 1776642755406,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 616,
+      "y": 823,
+      "absoluteX": 616,
+      "absoluteY": 823,
+      "relativeTime": 61451
+    },
+    {
+      "timestamp": 1776642755507,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 513,
+      "y": 636,
+      "absoluteX": 513,
+      "absoluteY": 636,
+      "relativeTime": 61552
+    },
+    {
+      "timestamp": 1776642755603,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 814,
+      "y": 793,
+      "absoluteX": 814,
+      "absoluteY": 793,
+      "relativeTime": 61648
+    },
+    {
+      "timestamp": 1776642755672,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 383,
+      "y": 637,
+      "absoluteX": 383,
+      "absoluteY": 637,
+      "relativeTime": 61717
+    },
+    {
+      "timestamp": 1776642755777,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 898,
+      "y": 1131,
+      "absoluteX": 898,
+      "absoluteY": 1131,
+      "relativeTime": 61822
+    },
+    {
+      "timestamp": 1776642755861,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 736,
+      "y": 635,
+      "absoluteX": 736,
+      "absoluteY": 635,
+      "relativeTime": 61906
+    },
+    {
+      "timestamp": 1776642755979,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 936,
+      "y": 643,
+      "absoluteX": 936,
+      "absoluteY": 643,
+      "relativeTime": 62024
+    },
+    {
+      "timestamp": 1776642756109,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 463,
+      "y": 55,
+      "absoluteX": 463,
+      "absoluteY": 55,
+      "relativeTime": 62154
+    },
+    {
+      "timestamp": 1776642756246,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 653,
+      "y": 43,
+      "absoluteX": 653,
+      "absoluteY": 43,
+      "relativeTime": 62291
+    },
+    {
+      "timestamp": 1776642756413,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 354,
+      "y": 361,
+      "absoluteX": 354,
+      "absoluteY": 361,
+      "relativeTime": 62458
+    },
+    {
+      "timestamp": 1776642756562,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 45,
+      "y": 441,
+      "absoluteX": 45,
+      "absoluteY": 441,
+      "relativeTime": 62607
+    },
+    {
+      "timestamp": 1776642756695,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 49,
+      "y": 382,
+      "absoluteX": 49,
+      "absoluteY": 382,
+      "relativeTime": 62740
+    },
+    {
+      "timestamp": 1776642756815,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": -33,
+      "y": 148,
+      "absoluteX": -33,
+      "absoluteY": 148,
+      "relativeTime": 62860
+    },
+    {
+      "timestamp": 1776642756954,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1009,
+      "y": 459,
+      "absoluteX": 1009,
+      "absoluteY": 459,
+      "relativeTime": 62999
+    },
+    {
+      "timestamp": 1776642757120,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1374,
+      "y": 155,
+      "absoluteX": 1374,
+      "absoluteY": 155,
+      "relativeTime": 63165
+    },
+    {
+      "timestamp": 1776642757255,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1005,
+      "y": 875,
+      "absoluteX": 1005,
+      "absoluteY": 875,
+      "relativeTime": 63300
+    },
+    {
+      "timestamp": 1776642757381,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1018,
+      "y": -503,
+      "absoluteX": 1018,
+      "absoluteY": -503,
+      "relativeTime": 63426
+    },
+    {
+      "timestamp": 1776642757502,
+      "taskId": "inline_validation",
+      "pageUrl": "tasks/inline.html",
+      "x": 1054,
+      "y": 348,
+      "absoluteX": 1054,
+      "absoluteY": 348,
+      "relativeTime": 63547
+    }
+  ],
+  "emotionData": [],
+  "interactionEvents": [
+    {
+      "timestamp": 1776642699324,
+      "type": "task_start",
+      "taskId": "modal_window",
+      "data": {
+        "taskId": "modal_window",
+        "description": "Задача: modal_window.html"
+      }
+    },
+    {
+      "timestamp": 1776642701407,
+      "type": "task_complete",
+      "taskId": "modal_window",
+      "data": {
+        "taskId": "modal_window"
+      }
+    },
+    {
+      "timestamp": 1776642705444,
+      "type": "task_start",
+      "taskId": "modal_plashka",
+      "data": {
+        "taskId": "modal_plashka",
+        "description": "Задача: unmodal.html"
+      }
+    },
+    {
+      "timestamp": 1776642707502,
+      "type": "task_complete",
+      "taskId": "modal_plashka",
+      "data": {
+        "taskId": "modal_plashka"
+      }
+    },
+    {
+      "timestamp": 1776642710509,
+      "type": "task_start",
+      "taskId": "pretty_modal_validation",
+      "data": {
+        "taskId": "pretty_modal_validation",
+        "description": "Задача: modalka_pretty.html"
+      }
+    },
+    {
+      "timestamp": 1776642713370,
+      "type": "task_complete",
+      "taskId": "pretty_modal_validation",
+      "data": {
+        "taskId": "pretty_modal_validation"
+      }
+    },
+    {
+      "timestamp": 1776642728707,
+      "type": "task_start",
+      "taskId": "inline_validation",
+      "data": {
+        "taskId": "inline_validation",
+        "description": "Задача: inline.html"
+      }
+    },
+    {
+      "type": "page_loaded",
+      "timestamp": 1776642729323,
+      "taskId": "phone_order_inline",
+      "pageUrl": "tasks/inline.html",
+      "ui_type": "inline_checkout",
+      "page_url": "/tasks/inline.html"
+    },
+    {
+      "timestamp": 1776642757615,
+      "type": "task_complete",
+      "taskId": "inline_validation",
+      "data": {
+        "taskId": "inline_validation"
+      }
+    }
+  ],
+  "errors": [],
+  "participantNumber": "1",
+  "glasses": false,
+  "consentData": true,
+  "consentExperiment": true,
+  "modalInstances": {},
+  "inlineFieldStats": {},
+  "emotionStats": {},
+  "calibrationAccuracy": 45,
+  "statistics": {
+    "totalTasks": 4,
+    "completedTasks": 4,
+    "totalGazePoints": 250,
+    "totalEmotionSamples": 0,
+    "totalInteractions": 9
+  }
+}

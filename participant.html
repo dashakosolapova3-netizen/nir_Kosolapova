@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Участник эксперимента</title>
+  <link href="lib/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background: #f5f6fa; }
+    .centered-form { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .form-box { background: #fff; padding: 32px 32px 24px 32px; border-radius: 16px; box-shadow: 0 4px 32px #0003; min-width: 320px; max-width: 90vw; }
+  </style>
+</head>
+<body>
+  <div class="centered-form">
+    <form id="participantForm" class="form-box">
+      <h3 style="margin-top:0;margin-bottom:24px;">Информация об участнике</h3>
+      <div class="mb-3">
+        <label for="participantNumber" class="form-label">Номер участника</label>
+        <input type="text" class="form-control" id="participantNumber" required autocomplete="off" style="max-width:200px;">
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="glassesCheck">
+        <label class="form-check-label" for="glassesCheck">Я в очках</label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="consentDataCheck" required>
+        <label class="form-check-label" for="consentDataCheck">Я согласен(согласна) на обработку анонимизированных данных</label>
+      </div>
+      <div class="form-check mb-4">
+        <input class="form-check-input" type="checkbox" id="consentExperimentCheck" required>
+        <label class="form-check-label" for="consentExperimentCheck">Я согласен(согласна) на участие в эксперименте</label>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Готово</button>
+    </form>
+  </div>
+  <script>
+    // === Очистка кэша WebGazer при смене участника ===
+    (function() {
+      console.log('Новый участник — очистка кэша WebGazer...');
+
+      // 1. Очистка localStorage (ключи WebGazer)
+      const keysToRemove = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && (key.startsWith('webgazer') || key.startsWith('WG') || key.includes('ridge'))) {
+          keysToRemove.push(key);
+        }
+      }
+      keysToRemove.forEach(key => {
+        localStorage.removeItem(key);
+        console.log('  Удалён ключ:', key);
+      });
+
+      // 2. Удаляем данные предыдущего участника
+      localStorage.removeItem('participantInfo');
+
+      // 3. Очистка indexedDB
+      ['localforage', 'webgazerDB', 'webgazer'].forEach(name => {
+        try {
+          const req = indexedDB.deleteDatabase(name);
+          req.onsuccess = () => console.log(`  indexedDB '${name}' удалена`);
+        } catch(e) {}
+      });
+
+      // 4. Очистка sessionStorage
+      const sessionKeys = [];
+      for (let i = 0; i < sessionStorage.length; i++) {
+        const key = sessionStorage.key(i);
+        if (key && (key.startsWith('webgazer') || key.startsWith('WG'))) {
+          sessionKeys.push(key);
+        }
+      }
+      sessionKeys.forEach(key => sessionStorage.removeItem(key));
+
+      console.log('✅ Кэш WebGazer очищен для нового участника');
+    })();
+
+    document.getElementById('participantForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const participantNumber = document.getElementById('participantNumber').value.trim();
+      const glasses = document.getElementById('glassesCheck').checked;
+      const consentData = document.getElementById('consentDataCheck').checked;
+      const consentExperiment = document.getElementById('consentExperimentCheck').checked;
+      if (!participantNumber || !consentData || !consentExperiment) {
+        alert('Пожалуйста, заполните все обязательные поля и дайте согласия.');
+        return;
+      }
+      localStorage.setItem('participantInfo', JSON.stringify({ participantNumber, glasses, consentData, consentExperiment }));
+      window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html> 

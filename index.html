@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>UX Эксперимент</title>
+  <link href="lib/css/bootstrap.min.css" rel="stylesheet">
+  <script src="lib/js/bootstrap.bundle.min.js"></script>
+  <script defer src="face-api.min.js"></script>
+  <script defer src="webgazer.js"></script>
+  <script defer src="lib/js/sweetalert.min.js"></script>
+  <script defer src="./calibration/calibration.js"></script>
+  <script defer src="./calibration/precision_calculation.js"></script>
+  <script defer src="./calibration/precision_store_points.js"></script>
+  <script defer src="./calibration/resize_canvas.js"></script>
+  <script defer src="script.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="controls">
+    <button id="experimentBtn" class="btn btn-start">Начать</button>
+    <div class="controls-divider"></div>
+    <button id="tasksBtn" class="btn btn-tasks">Панель заданий</button>
+    <button id="startCalibrationBtn" class="btn btn-tasks">Калибровка</button>
+    <div id="Accuracy" class="accuracy-indicator" title="Точность не измерена">
+      <a>Точность не измерена</a>
+    </div>
+    <div class="controls-divider"></div>
+    <!-- <button id="analyzeBtn" class="btn" type="button">Анализировать</button>
+    <button id="importReportBtn" class="btn" type="button">Импорт отчета</button>
+    <button id="uploadAnalyzeBtn" class="btn">Загрузить JSON</button>-->
+    <div class="timer-container">
+      <div id="timer" class="timer">Время: 00:00</div>
+    </div>
+  </div>
+  <div class="content-offset"></div>
+  <div class="files-container">
+    <div id="selectedFilesList"></div>
+  </div>
+  <canvas id="plotting_canvas" width="500" height="500"></canvas>
+  <div id="calibrationDiv">
+    <input type="button" class="Calibration" id="Pt1"></input>
+    <input type="button" class="Calibration" id="Pt2"></input>
+    <input type="button" class="Calibration" id="Pt3"></input>
+    <input type="button" class="Calibration" id="Pt4"></input>
+    <input type="button" class="Calibration" id="Pt5"></input>
+    <input type="button" class="Calibration" id="Pt6"></input>
+    <input type="button" class="Calibration" id="Pt7"></input>
+    <input type="button" class="Calibration" id="Pt8"></input>
+    <input type="button" class="Calibration" id="Pt9"></input>
+  </div>
+  <div id="calibrationAccuracy"></div>
+
+  <!-- Модальное окно с заданиями -->
+  <div id="tasksModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Задания для эксперимента</h2>
+      <table class="tasks-table">
+        <thead>
+          <tr>
+            <th>№</th>
+            <th>Задание</th>
+            <th>Статус</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>
+              <div><strong>Модальная валидация</strong></div>
+              <div style="font-size: 12px; color: #666; margin-top: 4px;">
+                Если ваш ID четный, то выбирайте это задание. Заполните форму. Ошибки будут показаны в удобном модальном
+                окне после нажатия «Отправить»
+              </div>
+            </td>
+            <td><button class="task-start-btn" data-task="pretty_modal_validation"
+                data-file="modalka_pretty.html">Начать</button></td>
+          </tr>
+          <td>2</td>
+          <td>
+            <div><strong>Inline-валидация</strong></div>
+            <div style="font-size: 12px; color: #666; margin-top: 4px;">
+              Если ваш ID нечетный, то выбирайте это задание. Заполните форму. Ошибки будут показываться под полями в
+              реальном времени
+            </div>
+          </td>
+          <td><button class="task-start-btn" data-task="inline_validation" data-file="inline.html">Начать</button>
+          </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="video-container">
+    <div class="container" id="container1">
+      <div class="camera-label">Face API JS - Распознавание мимики</div>
+      <div class="values-display" id="faceValues"></div>
+      <video id="video" autoplay muted></video>
+    </div>
+    <div class="container" id="container2">
+      <div class="camera-label">WebGazer - Ай-трекинг</div>
+      <div class="values-display" id="gazeValues"></div>
+      <video id="video2" autoplay muted></video>
+      <div id="webgazerLoading"
+        style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px;background:#fff;z-index:1002;position:absolute;top:0;left:0;">
+        Webgazer.js загружается. Пожалуйста, подождите
+      </div>
+    </div>
+  </div>
+
+  <div id="calibrationModal">
+    <div class="calibration-modal-content">
+      <div id="calibrationModalText"></div>
+      <button id="calibrationModalOk" class="btn btn-tasks">ОК</button>
+      <button id="calibrationModalRetry" class="btn btn-tasks">Попробовать ещё раз</button>
+    </div>
+  </div>
+
+  <!-- Добавляем модальное окно помощи из стандартной калибровки -->
+  <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="helpModalLabel">Инструкция по калибровке</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Для калибровки eye-tracking системы:</p>
+          <ol>
+            <li>Нажмите на каждую из 9 точек на экране</li>
+            <li>Вы должны нажать на каждую точку 5 раз, пока она не станет желтой</li>
+            <li>Не двигайте головой во время калибровки</li>
+          </ol>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<style>
+  .task-start-btn {
+    padding: 8px 16px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+  .task-start-btn.completed {
+    background: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .task-start-btn:hover:not(.completed) {
+    background: #45a049;
+  }
+</style>
+
+</html>
