@@ -91,19 +91,5 @@
 - Собранные данные хранятся локально и могут быть экспортированы для дальнейшего анализа индивидуального эффекта воздействия.
 
 # About
-The repository presents a framework for investigation individual effects of UI treatment.
-
-The project is completed as Magister Thesis project by Ivan P. Eroshin at SPbPU Institute of Computer Science and Cybersecurity (SPbPU ICSC).
-
-Persons
-The main contributor of the project is Ivan P. Eroshin, a student of SPbPU ICSC.
-The advisor and minor contributor is Vladimir A. Parkhomenko a seniour lecturer of SPbPU ICSC. 
-
-Warranty
-The contributors give no warranty for the using of the software. The authors kindly asks to cite paper which will be published soon [1].
-
-License
-This program is open to use anywhere and is licensed under the MIT license.
-
-[1] User Interface Evaluation Using Tracking Eyes and Facial Expressions, DAMDID 2025
+The main contributor Kosolapova D. D., student of SPbPU ICSC. The contributor E.S. Bulykina, students, SPbPU ICSC. The advisor Vladimir A. Parkhomenko, Senior Lecturer at the Institute of Social Sciences at SPbPU. SPbPU ICSC.
 "# nir_Kosolapova" 
