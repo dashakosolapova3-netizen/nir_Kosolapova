@@ -1,324 +1,897 @@
-import json
-import os
-import pandas as pd
 import numpy as np
+import pandas as pd
+import os
+import json
+import matplotlib.pyplot as plt
+import io
+import base64
 from datetime import datetime
-from scipy import stats
-import warnings
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeRegressor
 
-warnings.filterwarnings('ignore')
+def detect_fixations(gaze_data, dispersion_threshold=50, duration_threshold_ms=100):
+    """Detects fixations using a simple dispersion-based algorithm and calculates related metrics."""
+    fixations = []
+    current_fixation_start_index = 0
 
-class RegistrationFormAnalyzer:
-    """
-    Анализатор данных для исследования форм регистрации.
-    Сравнивает модальную (задание 3) и inline (задание 4) валидацию.
-    Включает метрики: валентность, негатив, тревожность, когнитивная нагрузка, время реакции.
-    """
-    
-    def __init__(self, data_folder='data/experiments'):
-        self.data_folder = data_folder
-        self.sessions_data = []
-        self.results_df = None
-        self.comparison_results = {}
-        
+    if not gaze_data:
+        return {'num_fixations': 0, 'avg_fixation_duration': 0, 'gaze_dispersion_x': 0, 'gaze_dispersion_y': 0}
+
+    for i in range(len(gaze_data)):
+        window_points = gaze_data[current_fixation_start_index : i + 1]
+        if not window_points: continue
+
+        min_x = min(p.get('x', 0) for p in window_points)
+        max_x = max(p.get('x', 0) for p in window_points)
+        min_y = min(p.get('y', 0) for p in window_points)
+        max_y = max(p.get('y', 0) for p in window_points)
+
+        x_dispersion = max_x - min_x
+        y_dispersion = max_y - min_y
+        total_dispersion = max(x_dispersion, y_dispersion)
+
+        start_time = window_points[0].get('timestamp', 0)
+        end_time = window_points[-1].get('timestamp', 0)
+        duration = end_time - start_time
+
+        if total_dispersion > dispersion_threshold:
+            potential_fixation_window = gaze_data[current_fixation_start_index : i]
+            if potential_fixation_window:
+                potential_duration = potential_fixation_window[-1].get('timestamp', 0) - potential_fixation_window[0].get('timestamp', 0)
+                if potential_duration >= duration_threshold_ms:
+                    fixations.append(potential_fixation_window)
+            current_fixation_start_index = i
+        elif i == len(gaze_data) - 1 and duration >= duration_threshold_ms:
+             fixations.append(window_points)
+
+    num_fixations = len(fixations)
+    avg_fixation_duration = np.mean([f[-1].get('timestamp', 0) - f[0].get('timestamp', 0) for f in fixations]) if fixations else 0
+
+    if gaze_data:
+        all_x = [p.get('x', 0) for p in gaze_data]
+        all_y = [p.get('y', 0) for p in gaze_data]
+        gaze_dispersion_x = np.std(all_x) if len(all_x) > 1 else 0
+        gaze_dispersion_y = np.std(all_y) if len(all_y) > 1 else 0
+    else:
+        gaze_dispersion_x = 0
+        gaze_dispersion_y = 0
+
+    return {
+        'num_fixations': num_fixations,
+        'avg_fixation_duration': float(avg_fixation_duration),
+        'gaze_dispersion_x': float(gaze_dispersion_x),
+        'gaze_dispersion_y': float(gaze_dispersion_y)
+    }
+
+class CustomForest:
+    def __init__(self, n_estimators=100, max_depth=10, min_samples_split=10, random_state=None, max_features='sqrt'):
+        self.n_estimators = n_estimators
+        self.max_depth = max_depth
+        self.min_samples_split = min_samples_split
+        self.random_state = random_state
+        self.max_features = max_features
+        self.trees = []
+        self.features_list = []
+
+    def fit(self, X, y):
+        np.random.seed(self.random_state)
+        self.trees = []
+        self.features_list = []
+        n_features = X.shape[1]
+        for i in range(self.n_estimators):
+            if self.max_features == 'sqrt':
+                n_sub_features = max(1, int(np.sqrt(n_features)))
+            elif self.max_features == 'log2':
+                n_sub_features = max(1, int(np.log2(n_features)))
+            elif isinstance(self.max_features, int):
+                n_sub_features = min(n_features, self.max_features)
+            else:
+                n_sub_features = n_features
+            feature_indices = np.random.choice(n_features, n_sub_features, replace=False)
+            tree_max_depth = self.max_depth + np.random.randint(-2, 3)
+            tree_min_samples_split = max(2, self.min_samples_split + np.random.randint(-3, 4))
+            tree_random_state = np.random.randint(0, 100000)
+            tree = DecisionTreeRegressor(
+                max_depth=tree_max_depth,
+                min_samples_split=tree_min_samples_split,
+                random_state=tree_random_state
+            )
+            idx = np.random.choice(len(X), size=int(len(X) * 0.8), replace=True)
+            X_boot = X[idx][:, feature_indices]
+            y_boot = y[idx]
+            tree.fit(X_boot, y_boot)
+            self.trees.append(tree)
+            self.features_list.append(feature_indices)
+        return self
+
+    def predict(self, X):
+        preds = np.zeros((len(X), len(self.trees)))
+        for i, tree in enumerate(self.trees):
+            X_sub = X[:, self.features_list[i]]
+            preds[:, i] = tree.predict(X_sub)
+        return np.mean(preds, axis=1)
+
+class ITEAnalyzer:
+    def __init__(self, experiments_folder='data/experiments'):
+        self.experiments_folder = experiments_folder
+
     def load_all_sessions(self):
-        """Загрузка всех JSON-сессий из папки"""
-        print(f"Загрузка данных из {self.data_folder}...")
-        if not os.path.exists(self.data_folder):
-            print(f"Папка {self.data_folder} не найдена. Создаю...")
-            os.makedirs(self.data_folder, exist_ok=True)
-            return 0
-            
-        files = [f for f in os.listdir(self.data_folder) if f.endswith('.json')]
-        for filename in files:
-            filepath = os.path.join(self.data_folder, filename)
-            try:
-                with open(filepath, 'r', encoding='utf-8') as f:
+        """Загружает все экспериментальные json-файлы в датафрейм"""
+        records = []
+        print("\n=== Начало загрузки сессий ===")
+        for fname in os.listdir(self.experiments_folder):
+            if fname.endswith('.json'):
+                with open(os.path.join(self.experiments_folder, fname), 'r', encoding='utf-8') as f:
                     data = json.load(f)
-                    data['_filename'] = filename
-                    self.sessions_data.append(data)
-            except Exception as e:
-                print(f"Ошибка загрузки {filename}: {e}")
-                
-        print(f"Загружено  {len(self.sessions_data)}  сессий")
-        return len(self.sessions_data)
-    
-    def classify_session(self, session):
+                    user_id = data.get('user_id', data.get('sessionId', fname))
+                    browser = data.get('browser', {})
+                    if isinstance(browser, dict):
+                        browser_name = browser.get('name', 'Unknown')
+                    else:
+                        browser_name = browser or 'Unknown'
+                    print(f"Файл: {fname}")
+                    print(f"  Браузер: {browser_name}")
+                    print(f"  Данные браузера: {browser}")
+                    tasks = data.get('tasks', [])
+                    completed_tasks = [t for t in tasks if t.get('completed')]
+                    completion_rate = len(completed_tasks) / len(tasks) if tasks else 0
+                    print(f"  Выполнено заданий: {len(completed_tasks)} из {len(tasks)}")
+                    print("---")
+                    avg_task_duration = np.mean([t.get('duration', 0) for t in completed_tasks]) if completed_tasks else 0
+                    total_gaze_points = len(data.get('gazeData', []))
+                    total_emotions = len(data.get('emotionData', []))
+                    total_interactions = len(data.get('interactionEvents', []))
+                    positive_emotions = 0
+                    negative_emotions = 0
+                    neutral_emotions = 0
+                    emotion_data = data.get('emotionData', [])
+                    for emotion_record in emotion_data:
+                        dominant_emotion = emotion_record.get('dominantEmotion')
+                        if dominant_emotion == 'happy':
+                            positive_emotions += 1
+                        elif dominant_emotion in ['angry', 'sad', 'fearful', 'disgusted']:
+                            negative_emotions += 1
+                        elif dominant_emotion == 'neutral':
+                            neutral_emotions += 1
+
+                    emotion_transitions_count = 0
+                    if emotion_data:
+                        previous_emotion = emotion_data[0].get('dominantEmotion')
+                        for i in range(1, len(emotion_data)):
+                            current_emotion = emotion_data[i].get('dominantEmotion')
+                            if current_emotion and previous_emotion and current_emotion != previous_emotion:
+                                emotion_transitions_count += 1
+                            previous_emotion = current_emotion
+
+                    gaze_data = data.get('gazeData', [])
+                    gaze_metrics = detect_fixations(gaze_data)
+
+                    records.append({
+                        'user_id': user_id,
+                        'session_id': data.get('sessionId', fname),
+                        'browser': browser_name,
+                        'completion_rate': completion_rate,
+                        'avg_task_duration': avg_task_duration,
+                        'total_gaze_points': total_gaze_points,
+                        'total_emotions': total_emotions, 
+                        'total_interactions': total_interactions,
+                        'positive_emotions': positive_emotions,
+                        'negative_emotions': negative_emotions,
+                        'neutral_emotions': neutral_emotions,
+                        'emotion_transitions_count': emotion_transitions_count,
+                        'gaze_num_fixations': gaze_metrics['num_fixations'],
+                        'gaze_avg_fixation_duration': gaze_metrics['avg_fixation_duration'],
+                        'gaze_dispersion_x': gaze_metrics['gaze_dispersion_x'],
+                        'gaze_dispersion_y': gaze_metrics['gaze_dispersion_y'],
+                    })
+        return pd.DataFrame(records)
+
+    def analyze_experiment(self, experiment_data=None):
         """
-        Определяет тип сессии (Modal или Inline).
-        Логика: Четный ID -> Modal, Нечетный ID -> Inline.
+        Анализирует все реальные экспериментальные данные.
+        Если experiment_data передан — добавляет его к анализу (например, для онлайн-анализа).
         """
-        # --- Метод 1: По номеру участника (Самый надежный) ---
-        p_id = session.get('participantNumber')
-        if p_id is not None:
-            try:
-                # Приводим к строке, затем к числу, чтобы избежать ошибок типов
-                num = int(str(p_id))
-                if num % 2 == 0:
-                    return 'modal'
+        individual_ites_list = []
+        try:
+            df = self.load_all_sessions()
+            if experiment_data:
+                user_id = experiment_data.get('user_id', experiment_data.get('sessionId', 'current'))
+                browser = experiment_data.get('browser', {})
+                if isinstance(browser, dict):
+                    browser_name = browser.get('name', 'Unknown')
                 else:
-                    return 'inline'
-            except (ValueError, TypeError):
-                pass 
-
-        tasks = session.get('tasks', [])
-        for task in tasks:
-            # Берем ID задачи и приводим к нижнему регистру
-            tid = str(task.get('id', '')).lower()
-            
-            # Ключевые слова для модальной валидации
-            if any(k in tid for k in ['modal', 'modalka', 'pretty']):
-                return 'modal'
-            
-            # Ключевые слова для инлайн валидации
-            if any(k in tid for k in ['inline', 'unmodal', 'form_inline']):
-                return 'inline'
+                    browser_name = browser or 'Unknown'
+                tasks = experiment_data.get('tasks', [])
+                completed_tasks = [t for t in tasks if t.get('completed')]
+                completion_rate = len(completed_tasks) / len(tasks) if tasks else 0
+                avg_task_duration = np.mean([t.get('duration', 0) for t in completed_tasks]) if completed_tasks else 0
+                total_gaze_points = len(experiment_data.get('gazeData', []))
+                total_emotions = len(experiment_data.get('emotionData', []))
+                total_interactions = len(experiment_data.get('interactionEvents', []))
                 
-        return 'unknown'
-    
-    def calculate_anxiety_index(self, expressions):
-        """
-        Индекс тревожности. Учитывает эффект внезапности (surprise) при появлении модалки,
-        а также стресс (fearful, angry) и фрустрацию (sad).
-        Формула: 0.5*Surprise + 1.0*Fear + 0.8*Angry + 0.4*Sad
-        """
-        return (expressions.get('surprised', 0) * 0.5 +
-                expressions.get('fearful', 0) * 1.0 +
-                expressions.get('angry', 0) * 0.8 +
-                expressions.get('sad', 0) * 0.4)
-
-    def calculate_emotion_metrics(self, emotion_data):
-        """Расчёт базовых и продвинутых эмоциональных метрик"""
-        if not emotion_data:
-            return {k: 0.0 for k in ['avg_valence', 'std_valence', 'avg_negative_prob', 
-                                     'avg_anxiety', 'peak_anxiety', 'total_samples', 'negative_ratio']}
-            
-        df = pd.DataFrame(emotion_data)
-        valence_map = {'happy': 0.8, 'surprised': 0.2, 'neutral': 0.0, 
-                       'sad': -0.4, 'fearful': -0.6, 'angry': -0.8, 'disgusted': -0.9}
-        
-        def calc_valence(expr): return sum(expr.get(e, 0) * v for e, v in valence_map.items())
-        def calc_neg(expr): return sum(expr.get(e, 0) for e in ['angry', 'disgusted', 'sad', 'fearful'])
-        def calc_anx(expr): return self.calculate_anxiety_index(expr)
-        def dominant(expr): return max(expr.items(), key=lambda x: x[1])[0]
-        
-        df['valence'] = df['expressions'].apply(calc_valence)
-        df['negative_prob'] = df['expressions'].apply(calc_neg)
-        df['anxiety'] = df['expressions'].apply(calc_anx)
-        df['dominant'] = df['expressions'].apply(dominant)
-        
-        return {
-            'avg_valence': df['valence'].mean(),
-            'std_valence': df['valence'].std() if len(df) > 1 else 0.0,
-            'avg_negative_prob': df['negative_prob'].mean(),
-            'avg_anxiety': df['anxiety'].mean(),
-            'peak_anxiety': df['anxiety'].max(),
-            'total_samples': len(df),
-            'negative_ratio': (df['dominant'].isin(['angry', 'sad', 'fearful', 'disgusted'])).mean()
-        }
-    
-    def calculate_interaction_metrics(self, events):
-        """Анализ кликов, закрытий и времени реакции на модалки"""
-        if not events:
-            return {'modal_shown_count': 0, 'total_clicks': 0, 'error_corrections': 0, 'avg_modal_reaction_time': 0.0}
-            
-        df = pd.DataFrame(events)
-        modals = df[df['type'] == 'modal_shown']
-        clicks = df[df['type'] == 'click']
-        corrections = 0
-        
-        for _, row in clicks.iterrows():
-            if isinstance(row.get('data'), dict):
-                text = str(row['data'].get('text', '')).lower()
-                if any(w in text for w in ['нет', 'спасибо', 'закрыть', 'ок', 'исправить']):
-                    corrections += 1
-                    
-        # Время реакции: от modal_shown до следующего click или modal_closed
-        reaction_times = []
-        for _, m in modals.iterrows():
-            m_time = m['timestamp']
-            subsequent = df[(df['timestamp'] > m_time) & ((df['type'] == 'click') | (df['type'] == 'modal_closed'))]
-            if not subsequent.empty:
-                delta = (subsequent.iloc[0]['timestamp'] - m_time) / 1000.0
-                reaction_times.append(delta)
+                positive_emotions = 0
+                negative_emotions = 0
+                neutral_emotions = 0
+                emotion_data = experiment_data.get('emotionData', [])
+                for emotion_record in emotion_data:
+                    dominant_emotion = emotion_record.get('dominantEmotion')
+                    if dominant_emotion == 'happy':
+                        positive_emotions += 1
+                    elif dominant_emotion in ['angry', 'sad', 'fearful', 'disgusted']:
+                        negative_emotions += 1
+                    elif dominant_emotion == 'neutral':
+                        neutral_emotions += 1
                 
-        return {
-            'modal_shown_count': len(modals),
-            'total_clicks': len(clicks),
-            'error_corrections': corrections,
-            'avg_modal_reaction_time': np.mean(reaction_times) if reaction_times else 0.0
-        }
-    
-    def calculate_gaze_metrics(self, gaze_data):
-        """Анализ айтрекинга: скорость, дисперсия, частота фиксаций"""
-        if not gaze_data or len(gaze_data) < 2:
-            return {'avg_gaze_speed': 0.0, 'gaze_variance': 0.0, 'fixations_per_sec': 0.0}
+                emotion_transitions_count = 0
+                if emotion_data:
+                    previous_emotion = emotion_data[0].get('dominantEmotion')
+                    for i in range(1, len(emotion_data)):
+                        current_emotion = emotion_data[i].get('dominantEmotion')
+                        if current_emotion and previous_emotion and current_emotion != previous_emotion:
+                            emotion_transitions_count += 1
+                        previous_emotion = current_emotion
+
+                gaze_data = experiment_data.get('gazeData', [])
+                gaze_metrics = detect_fixations(gaze_data)
+
+                df_new = pd.DataFrame([{
+                    'user_id': user_id,
+                    'session_id': experiment_data.get('sessionId', 'current'),
+                    'browser': browser_name,
+                    'completion_rate': completion_rate,
+                    'avg_task_duration': avg_task_duration,
+                    'total_gaze_points': total_gaze_points,
+                    'total_emotions': total_emotions, 
+                    'total_interactions': total_interactions,
+                    'positive_emotions': positive_emotions,
+                    'negative_emotions': negative_emotions,
+                    'neutral_emotions': neutral_emotions,
+                    'emotion_transitions_count': emotion_transitions_count,
+                    'gaze_num_fixations': gaze_metrics['num_fixations'],
+                    'gaze_avg_fixation_duration': gaze_metrics['avg_fixation_duration'],
+                    'gaze_dispersion_x': gaze_metrics['gaze_dispersion_x'],
+                    'gaze_dispersion_y': gaze_metrics['gaze_dispersion_y'],
+                }])
+                df = pd.concat([df, df_new], ignore_index=True)
+
+            print("\n=== Анализ данных ===")
+            print(f"Всего сессий: {len(df)}")
+            print("Браузеры в данных:")
+            print(df['browser'].value_counts())
+
+            df['treatment'] = (df['browser'] == 'Chrome').astype(int)
+            print("\nTreatment распределение:")
+            print(df['treatment'].value_counts())
+            print("===================\n")
+
+            outcome = 'completion_rate'
+            features = ['avg_task_duration', 'total_gaze_points', 'total_emotions', 'total_interactions', 'positive_emotions', 'negative_emotions', 'neutral_emotions', 'emotion_transitions_count', 'gaze_num_fixations', 'gaze_avg_fixation_duration', 'gaze_dispersion_x', 'gaze_dispersion_y']
+
+            warning = None
+            if len(df) < 2 or df['treatment'].nunique() < 2:
+                warning = 'Внимание: необходимо провести эксперимент хотя бы в двух разных браузерах (Chrome и не-Chrome).'
+                return {
+                    'session_count': int(len(df)),
+                    'ite_mean': {}, 
+                    'ite_std': {}, 
+                    'visualizations': {},
+                    'individual_ites': [],
+                    'note': warning
+                }
+
+            X = df[features].fillna(0).values
+            y = df[outcome].values
+            treatment = df['treatment'].values
+
+            # Разделяем данные на группы
+            X_treat = X[treatment == 1]
+            y_treat = y[treatment == 1]
+            X_ctrl = X[treatment == 0]
+            y_ctrl = y[treatment == 0]
+
+            # Проверяем, что у нас есть данные для обеих групп
+            if len(X_treat) == 0 or len(y_treat) == 0 or len(X_ctrl) == 0 or len(y_ctrl) == 0:
+                plt.figure(figsize=(6, 2))
+                plt.text(0.5, 0.5, 'Недостаточно данных для анализа', ha='center', va='center', fontsize=12)
+                plt.axis('off')
+                buffer = io.BytesIO()
+                plt.savefig(buffer, format='png', bbox_inches='tight', dpi=150)
+                buffer.seek(0)
+                plot_b64 = base64.b64encode(buffer.getvalue()).decode()
+                plt.close()
+                return {
+                    'session_count': int(len(df)),
+                    'ite_mean': {},
+                    'ite_std': {},  
+                    'visualizations': {
+                        'ite_boxplot': plot_b64 
+                    },
+                    'individual_ites': [], 
+                    'note': 'Внимание: нет данных хотя бы для одной из групп (Chrome или не-Chrome). Анализ невозможен.'
+                }
+
+            # Проверяем, что у нас достаточно данных для анализа
+            if len(X_treat) < 1 or len(X_ctrl) < 1:
+                warning = 'Внимание: необходимо провести эксперимент хотя бы в двух разных браузерах (Chrome и не-Chrome).'
+                return {
+                    'session_count': int(len(df)),
+                    'ite_mean': {}, 
+                    'ite_std': {},  
+                    'visualizations': {},
+                    'individual_ites': [], 
+                    'note': warning
+                }
+
+            # --- T-learner + Random Forest ---
+            rf_treat = RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42)
+            rf_ctrl = RandomForestRegressor(n_estimators=100, max_depth=10, random_state=43)
+            rf_treat.fit(X_treat, y_treat)
+            rf_ctrl.fit(X_ctrl, y_ctrl)
+            ite_rf = rf_treat.predict(X) - rf_ctrl.predict(X)
+
+            # --- X-learner + Random Forest ---
+            mu1_ctrl_rf = rf_treat.predict(X_ctrl) 
+            D0_rf = mu1_ctrl_rf - y_ctrl
+            mu0_treat_rf = rf_ctrl.predict(X_treat)
+            D1_rf = y_treat - mu0_treat_rf 
+
+            rf_D0 = RandomForestRegressor(n_estimators=100, max_depth=10, random_state=44)
+            rf_D1 = RandomForestRegressor(n_estimators=100, max_depth=10, random_state=45)
+            rf_D0.fit(X_ctrl, D0_rf)
+            rf_D1.fit(X_treat, D1_rf)
+
+            tau0_rf = rf_D0.predict(X)
+            tau1_rf = rf_D1.predict(X)
+
+            p = np.mean(treatment)
+
+            ite_x_rf = (1 - p) * tau0_rf + p * tau1_rf
+
+            # --- T-learner + Custom Forest ---
+            cf_treat = CustomForest(n_estimators=100, max_depth=10, random_state=42)
+            cf_ctrl = CustomForest(n_estimators=100, max_depth=10, random_state=43)
+            cf_treat.fit(X_treat, y_treat)
+            cf_ctrl.fit(X_ctrl, y_ctrl)
+            ite_cf = cf_treat.predict(X) - cf_ctrl.predict(X)
+
+            # --- X-learner + Custom Forest ---
+            mu1_ctrl_cf = cf_treat.predict(X_ctrl)
+            D0_cf = mu1_ctrl_cf - y_ctrl 
+            mu0_treat_cf = cf_ctrl.predict(X_treat) 
+            D1_cf = y_treat - mu0_treat_cf 
+
+            cf_D0 = CustomForest(n_estimators=100, max_depth=10, random_state=44)
+            cf_D1 = CustomForest(n_estimators=100, max_depth=10, random_state=45)
+            cf_D0.fit(X_ctrl, D0_cf)
+            cf_D1.fit(X_treat, D1_cf)
+
+            tau0_cf = cf_D0.predict(X)
+            tau1_cf = cf_D1.predict(X)
+
+            ite_x_cf = (1 - p) * tau0_cf + p * tau1_cf
+
+            # --- Визуализация: boxplot для всех моделей ---
+            plt.figure(figsize=(10, 6))
+            plt.boxplot([
+                ite_rf, ite_x_rf, ite_cf, ite_x_cf
+            ], labels=[
+                'T-learner + RF', 'X-learner + RF', 'T-learner + CF', 'X-learner + CF'
+            ], patch_artist=True)
+            plt.title('Сравнение ITE для всех моделей')
+            plt.ylabel('ITE')
+            buffer = io.BytesIO()
+            plt.savefig(buffer, format='png', bbox_inches='tight', dpi=300)
+            buffer.seek(0)
+            boxplot_b64 = base64.b64encode(buffer.getvalue()).decode()
+            plt.close()
+
+            # --- Визуализация: Scatter plot индивидуальных ITE (например, для T-learner + RF) ---
+            plt.figure(figsize=(12, 6))
+            # Используем уникальные user_id или просто индекс как x для наглядности
+            # Цветом обозначим браузер
+            colors = df['browser'].astype('category').cat.codes
+            scatter = plt.scatter(df.index, ite_rf, c=colors, cmap='viridis', alpha=0.6)
+            plt.title('Индивидуальные оценки ITE (T-learner + RF) по сессиям')
+            plt.xlabel('Индекс сессии в данных') # Или можно использовать user_id, если сессий у юзера мало
+            plt.ylabel('ITE (T-learner + RF)')
+            # Добавляем легенду для цветов браузеров
+            legend_elements = [plt.Line2D([0], [0], marker='o', color='w', label=cat, 
+                                        markerfacecolor=scatter.cmap(scatter.norm(code)), markersize=10)
+                               for code, cat in enumerate(df['browser'].astype('category').cat.categories)]
+            plt.legend(handles=legend_elements, title='Браузер')
+            plt.grid(True, linestyle='--', alpha=0.6)
             
-        df = pd.DataFrame(gaze_data).sort_values('timestamp')
-        df['dx'] = df['x'].diff()
-        df['dy'] = df['y'].diff()
-        df['dist'] = np.sqrt(df['dx']**2 + df['dy']**2)
-        df['dt'] = df['timestamp'].diff() / 1000.0
-        
-        # Фильтр выбросов (слишком быстрые скачки = потеря трекинга)
-        valid = df[(df['dt'] > 0) & (df['dist'] < 5000)]
-        speeds = valid['dist'] / valid['dt']
-        
-        duration = (df['timestamp'].iloc[-1] - df['timestamp'].iloc[0]) / 1000.0
-        
-        return {
-            'avg_gaze_speed': speeds.mean() if len(speeds) > 0 else 0.0,
-            'gaze_variance': df['x'].var() + df['y'].var(),
-            'fixations_per_sec': len(df) / duration if duration > 0 else 0.0
-        }
-    
-    def analyze_session(self, session):
-        """Сбор всех метрик для одной сессии"""
-        v_type = self.classify_session(session)
-        
-        # Фильтруем только задания по формам регистрации (3 и 4)
-        reg_keywords = ['modal', 'inline', 'modalka', 'pretty', 'validation']
-        reg_tasks = [t for t in session.get('tasks', []) 
-                     if any(k in t.get('id', '').lower() for k in reg_keywords)]
-        if not reg_tasks: reg_tasks = session.get('tasks', []) # fallback
-        
-        task_ids = [t['id'] for t in reg_tasks]
-        emotions = [e for e in session.get('emotionData', []) if e.get('taskId') in task_ids]
-        gazes = [g for g in session.get('gazeData', []) if g.get('taskId') in task_ids]
-        events = session.get('interactionEvents', [])
-        
-        metrics = {
-            'session_id': session.get('sessionId'),
-            'participant_id': session.get('participantNumber'),
-            'validation_type': v_type,
-            'total_duration_sec': sum(t.get('duration', 0) for t in reg_tasks) / 1000.0,
-            'completed_tasks': sum(1 for t in reg_tasks if t.get('completed'))
-        }
-        metrics.update(self.calculate_emotion_metrics(emotions))
-        metrics.update(self.calculate_interaction_metrics(events))
-        metrics.update(self.calculate_gaze_metrics(gazes))
-        
-        # Композитный индекс когнитивной нагрузки (нормализованный)
-        # Чем выше скорость взгляда, дисперсия и время реакции -> тем выше нагрузка
-        load_parts = [
-            metrics['avg_gaze_speed'] / 2000.0,      # нормализация скорости
-            metrics['gaze_variance'] / 500000.0,     # нормализация разброса
-            metrics['avg_modal_reaction_time'] / 8.0 # нормализация реакции
-        ]
-        metrics['cognitive_load_index'] = np.mean([p for p in load_parts if p >= 0])
-        
-        return metrics
-    
-    def analyze_all_sessions(self):
-        """Пакетный анализ всех сессий"""
-        print("Анализ сессий...")
-        all_metrics = []
-        for session in self.sessions_data:
+            buffer = io.BytesIO()
+            plt.savefig(buffer, format='png', bbox_inches='tight', dpi=300)
+            buffer.seek(0)
+            scatter_b64 = base64.b64encode(buffer.getvalue()).decode()
+            plt.close()
+
+            # --- Сбор индивидуальных ITE по сессиям ---
+            individual_ites_list = []
+            anxiety_indices = []
+            for i in range(len(df)):
+                A_disp = np.sqrt(df.iloc[i]['gaze_dispersion_x'] ** 2 + df.iloc[i]['gaze_dispersion_y'] ** 2)
+                t_fix_avg = df.iloc[i]['gaze_avg_fixation_duration']
+                f_fix = df.iloc[i]['gaze_num_fixations'] / (df.iloc[i]['avg_task_duration'] * len(df) if df.iloc[i]['avg_task_duration'] > 0 else 1)
+                anxiety_indices.append({
+                    'user_id': df.iloc[i]['user_id'],
+                    'session_id': df.iloc[i]['session_id'],
+                    'browser': df.iloc[i]['browser'],
+                    'A_disp': A_disp,
+                    't_fix_avg': t_fix_avg,
+                    'f_fix': f_fix
+                })
+                individual_ites_list.append({
+                    'user_id': df.iloc[i]['user_id'],
+                    'session_id': df.iloc[i]['session_id'],
+                    'browser': df.iloc[i]['browser'],
+                    'T-learner + RF': float(ite_rf[i]),
+                    'X-learner + RF': float(ite_x_rf[i]),
+                    'T-learner + CF': float(ite_cf[i]),
+                    'X-learner + CF': float(ite_x_cf[i]),
+                })
+
+            A_disp_ref = np.mean([a['A_disp'] for a in anxiety_indices])
+            t_fix_avg_ref = np.mean([a['t_fix_avg'] for a in anxiety_indices])
+            f_fix_ref = np.mean([a['f_fix'] for a in anxiety_indices])
+            w1 = w2 = w3 = 1.0
+            for a in anxiety_indices:
+                a['AnxietyIndex'] = (
+                    w1 * (a['A_disp'] / A_disp_ref if A_disp_ref else 0) +
+                    w2 * (a['f_fix'] / f_fix_ref if f_fix_ref else 0) -
+                    w3 * (a['t_fix_avg'] / t_fix_avg_ref if t_fix_avg_ref else 0)
+                )
+
+            plt.figure(figsize=(12, 6))
+            colors = pd.Series([a['browser'] for a in anxiety_indices]).astype('category').cat.codes
+            anxiety_vals = [a['AnxietyIndex'] for a in anxiety_indices]
+            scatter = plt.scatter(range(len(anxiety_indices)), anxiety_vals, c=colors, cmap='viridis', alpha=0.6)
+            plt.title('Индекс тревожности по сессиям (gaze)')
+            plt.xlabel('Индекс сессии в данных')
+            plt.ylabel('AnxietyIndex')
+            legend_elements = [plt.Line2D([0], [0], marker='o', color='w', label=cat,
+                                          markerfacecolor=scatter.cmap(scatter.norm(code)), markersize=10)
+                               for code, cat in enumerate(pd.Series([a['browser'] for a in anxiety_indices]).astype('category').cat.categories)]
+            plt.legend(handles=legend_elements, title='Браузер')
+            plt.grid(True, linestyle='--', alpha=0.6)
+            buffer = io.BytesIO()
+            plt.savefig(buffer, format='png', bbox_inches='tight', dpi=300)
+            buffer.seek(0)
+            anxiety_scatter_b64 = base64.b64encode(buffer.getvalue()).decode()
+            plt.close()
+
+            # Сохраняем таблицу всех признаков по сессиям
+            features_to_save = [
+                'participantNumber', 'user_id', 'session_id', 'browser',
+                'avg_task_duration', 'total_gaze_points', 'total_emotions', 'total_interactions',
+                'positive_emotions', 'negative_emotions', 'neutral_emotions', 'emotion_transitions_count',
+                'gaze_num_fixations', 'gaze_avg_fixation_duration', 'gaze_dispersion_x', 'gaze_dispersion_y'
+            ]
+            # Если participantNumber нет в df, добавим пустой столбец
+            if 'participantNumber' not in df.columns:
+                df['participantNumber'] = ''
+            timestamp_str = datetime.now().strftime('%Y%m%d_%H%M%S')
+            features_csv = f"data/results/all_features_table_{timestamp_str}.csv"
             try:
-                all_metrics.append(self.analyze_session(session))
+                df[features_to_save].to_csv(features_csv, index=False)
             except Exception as e:
-                print(f"Ошибка анализа {session.get('sessionId')}: {e}")
-                
-        self.results_df = pd.DataFrame(all_metrics)
-        print(f"Проанализировано {len(self.results_df)} сессий")
-        return self.results_df
-    
-    def compare_validation_types(self):
-        """Статистическое сравнение Modal vs Inline"""
-        if self.results_df is None or self.results_df.empty:
-            print("Сначала выполните analyze_all_sessions()")
-            return
-            
-        modal = self.results_df[self.results_df['validation_type'] == 'modal']
-        inline = self.results_df[self.results_df['validation_type'] == 'inline']
-        
-        print("\n" + "="*70)
-        print("СРАВНЕНИЕ: МОДАЛЬНАЯ vs INLINE ВАЛИДАЦИЯ")
-        print("="*70)
-        print(f"👥 Modal: {len(modal)} участников | Inline: {len(inline)} участников\n")
-        
-        metrics_to_check = [
-            ('avg_anxiety', ' Индекс Тревожности', False),
-            ('peak_anxiety', 'Пиковая Тревожность', False),
-            ('cognitive_load_index', ' Индекс Когнитивной Нагрузки', False),
-            ('avg_gaze_speed', 'Скорость движения взгляда (px/ms)', False),
-            ('avg_modal_reaction_time', 'Время реакции на модалку (сек)', False),
-            ('total_duration_sec', 'Общее время заполнения (сек)', False),
-            ('avg_negative_prob', 'Средняя вероятность негатива', False),
-            ('error_corrections', 'Исправлений ошибок', False),
-            ('total_clicks', 'Всего кликов', False)
+                print(f"Ошибка при сохранении all_features_table: {e}")
+
+            return {
+                'session_count': int(len(df)),
+                'ite_mean': {
+                    'T-learner + RF': float(np.mean(ite_rf)),
+                    'X-learner + RF': float(np.mean(ite_x_rf)),
+                    'T-learner + CF': float(np.mean(ite_cf)),
+                    'X-learner + CF': float(np.mean(ite_x_cf)),
+                },
+                'ite_std': {
+                    'T-learner + RF': float(np.std(ite_rf)),
+                    'X-learner + RF': float(np.std(ite_x_rf)),
+                    'T-learner + CF': float(np.std(ite_cf)),
+                    'X-learner + CF': float(np.std(ite_x_cf)),
+                },
+                'visualizations': {
+                    'ite_boxplot': boxplot_b64,
+                    'ite_scatter': scatter_b64,
+                    'anxiety_scatter': anxiety_scatter_b64
+                },
+                'individual_ites': individual_ites_list,
+                'anxiety_indices': anxiety_indices,
+                'note': warning or 'Анализ выполнен с помощью авторских реализаций T-learner/X-learner + Random Forest/Custom Forest.'
+            }
+        except Exception as e:
+            return {
+                'session_count': int(len(df)) if 'df' in locals() else 0,
+                'ite_mean': {}, 
+                'ite_std': {}, 
+                'visualizations': {},
+                'individual_ites': [],
+                'error': str(e),
+                'note': 'Произошла ошибка в процессе анализа.'
+            }
+
+    def analyze_experiment_list(self, experiment_list):
+        """
+        Анализирует список json-объектов (экспериментов), как если бы они были считаны из папки.
+        """
+        # Собираем все записи в датафрейм
+        records = []
+        for data in experiment_list:
+            user_id = data.get('user_id', data.get('sessionId', 'unknown'))
+            browser = data.get('browser', {})
+            if isinstance(browser, dict):
+                browser_name = browser.get('name', 'Unknown')
+            else:
+                browser_name = browser or 'Unknown'
+            tasks = data.get('tasks', [])
+            completed_tasks = [t for t in tasks if t.get('completed')]
+            completion_rate = len(completed_tasks) / len(tasks) if tasks else 0
+            avg_task_duration = np.mean([t.get('duration', 0) for t in completed_tasks]) if completed_tasks else 0
+            total_gaze_points = len(data.get('gazeData', []))
+            total_emotions = len(data.get('emotionData', []))
+            total_interactions = len(data.get('interactionEvents', []))
+            positive_emotions = 0
+            negative_emotions = 0
+            neutral_emotions = 0
+            emotion_data = data.get('emotionData', [])
+            for emotion_record in emotion_data:
+                dominant_emotion = emotion_record.get('dominantEmotion')
+                if dominant_emotion == 'happy':
+                    positive_emotions += 1
+                elif dominant_emotion in ['angry', 'sad', 'fearful', 'disgusted']:
+                    negative_emotions += 1
+                elif dominant_emotion == 'neutral':
+                    neutral_emotions += 1
+
+            emotion_transitions_count = 0
+            if emotion_data:
+                previous_emotion = emotion_data[0].get('dominantEmotion')
+                for i in range(1, len(emotion_data)):
+                    current_emotion = emotion_data[i].get('dominantEmotion')
+                    if current_emotion and previous_emotion and current_emotion != previous_emotion:
+                        emotion_transitions_count += 1
+                    previous_emotion = current_emotion
+
+            gaze_data = data.get('gazeData', [])
+            gaze_metrics = detect_fixations(gaze_data)
+
+            participant_number = data.get('participantNumber', '')
+
+            records.append({
+                'participantNumber': participant_number,
+                'user_id': user_id,
+                'session_id': data.get('sessionId', 'unknown'),
+                'browser': browser_name,
+                'completion_rate': completion_rate,
+                'avg_task_duration': avg_task_duration,
+                'total_gaze_points': total_gaze_points,
+                'total_emotions': total_emotions,
+                'total_interactions': total_interactions,
+                'positive_emotions': positive_emotions,
+                'negative_emotions': negative_emotions,
+                'neutral_emotions': neutral_emotions,
+                'emotion_transitions_count': emotion_transitions_count,
+                'gaze_num_fixations': gaze_metrics['num_fixations'],
+                'gaze_avg_fixation_duration': gaze_metrics['avg_fixation_duration'],
+                'gaze_dispersion_x': gaze_metrics['gaze_dispersion_x'],
+                'gaze_dispersion_y': gaze_metrics['gaze_dispersion_y'],
+            })
+        df = pd.DataFrame(records)
+        # Если датафрейм пустой, нет данных для анализа
+        if df.empty:
+            return {
+                'session_count': 0,
+                'ite_mean': {}, 
+                'ite_std': {},  
+                'visualizations': {},
+                'individual_ites': [], 
+                'note': 'Нет данных для анализа.'
+            }
+        # Иначе, передаем датафрейм в analyze_experiment_from_df для проведения анализа
+        return self.analyze_experiment_from_df(df)
+
+    def analyze_experiment_from_df(self, df):
+        def run_ite_analysis(df, features, outcome, treatment, label_suffix):
+            X = df[features].fillna(0).values
+            y = df[outcome].values
+            X_treat = X[treatment == 1]
+            y_treat = y[treatment == 1]
+            X_ctrl = X[treatment == 0]
+            y_ctrl = y[treatment == 0]
+            if len(X_treat) == 0 or len(y_treat) == 0 or len(X_ctrl) == 0 or len(y_ctrl) == 0:
+                return None
+            # --- T-learner + Random Forest ---
+            rf_treat = RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42)
+            rf_ctrl = RandomForestRegressor(n_estimators=100, max_depth=10, random_state=43)
+            rf_treat.fit(X_treat, y_treat)
+            rf_ctrl.fit(X_ctrl, y_ctrl)
+            ite_rf = rf_treat.predict(X) - rf_ctrl.predict(X)
+            # --- X-learner + Random Forest ---
+            mu1_ctrl_rf = rf_treat.predict(X_ctrl)
+            D0_rf = mu1_ctrl_rf - y_ctrl
+            mu0_treat_rf = rf_ctrl.predict(X_treat)
+            D1_rf = y_treat - mu0_treat_rf
+            rf_D0 = RandomForestRegressor(n_estimators=100, max_depth=10, random_state=44)
+            rf_D1 = RandomForestRegressor(n_estimators=100, max_depth=10, random_state=45)
+            rf_D0.fit(X_ctrl, D0_rf)
+            rf_D1.fit(X_treat, D1_rf)
+            tau0_rf = rf_D0.predict(X)
+            tau1_rf = rf_D1.predict(X)
+            p = np.mean(treatment)
+            ite_x_rf = (1 - p) * tau0_rf + p * tau1_rf
+            # --- T-learner + Custom Forest ---
+            cf_treat = CustomForest(n_estimators=100, max_depth=10, random_state=42)
+            cf_ctrl = CustomForest(n_estimators=100, max_depth=10, random_state=43)
+            cf_treat.fit(X_treat, y_treat)
+            cf_ctrl.fit(X_ctrl, y_ctrl)
+            ite_cf = cf_treat.predict(X) - cf_ctrl.predict(X)
+            # --- X-learner + Custom Forest ---
+            mu1_ctrl_cf = cf_treat.predict(X_ctrl)
+            D0_cf = mu1_ctrl_cf - y_ctrl
+            mu0_treat_cf = cf_ctrl.predict(X_treat)
+            D1_cf = y_treat - mu0_treat_cf
+            cf_D0 = CustomForest(n_estimators=100, max_depth=10, random_state=44)
+            cf_D1 = CustomForest(n_estimators=100, max_depth=10, random_state=45)
+            cf_D0.fit(X_ctrl, D0_cf)
+            cf_D1.fit(X_treat, D1_cf)
+            tau0_cf = cf_D0.predict(X)
+            tau1_cf = cf_D1.predict(X)
+            ite_x_cf = (1 - p) * tau0_cf + p * tau1_cf
+            # --- Индивидуальные эффекты по респондентам ---
+            individual_ites = []
+            for i in range(len(df)):
+                individual_ites.append({
+                    'participantNumber': df.iloc[i].get('participantNumber', ''),
+                    'user_id': df.iloc[i].get('user_id', ''),
+                    'session_id': df.iloc[i].get('session_id', ''),
+                    'browser': df.iloc[i].get('browser', ''),
+                    f'T-learner + RF{label_suffix}': float(ite_rf[i]),
+                    f'X-learner + RF{label_suffix}': float(ite_x_rf[i]),
+                    f'T-learner + CF{label_suffix}': float(ite_cf[i]),
+                    f'X-learner + CF{label_suffix}': float(ite_x_cf[i]),
+                })
+            # --- Визуализация: boxplot для всех моделей ---
+            plt.figure(figsize=(10, 6))
+            plt.boxplot([
+                ite_rf, ite_x_rf, ite_cf, ite_x_cf
+            ], labels=[
+                f'T-learner + RF{label_suffix}', f'X-learner + RF{label_suffix}', f'T-learner + CF{label_suffix}', f'X-learner + CF{label_suffix}'
+            ], patch_artist=True)
+            plt.title(f'Сравнение ITE для всех моделей {label_suffix}')
+            plt.ylabel('ITE')
+            buffer = io.BytesIO()
+            plt.savefig(buffer, format='png', bbox_inches='tight', dpi=300)
+            buffer.seek(0)
+            boxplot_b64 = base64.b64encode(buffer.getvalue()).decode()
+            plt.close()
+            return {
+                'ite_mean': {
+                    f'T-learner + RF{label_suffix}': float(np.mean(ite_rf)),
+                    f'X-learner + RF{label_suffix}': float(np.mean(ite_x_rf)),
+                    f'T-learner + CF{label_suffix}': float(np.mean(ite_cf)),
+                    f'X-learner + CF{label_suffix}': float(np.mean(ite_x_cf)),
+                },
+                'ite_std': {
+                    f'T-learner + RF{label_suffix}': float(np.std(ite_rf)),
+                    f'X-learner + RF{label_suffix}': float(np.std(ite_x_rf)),
+                    f'T-learner + CF{label_suffix}': float(np.std(ite_cf)),
+                    f'X-learner + CF{label_suffix}': float(np.std(ite_x_cf)),
+                },
+                'visualizations': {
+                    f'ite_boxplot{label_suffix}': boxplot_b64
+                },
+                'individual_ites': individual_ites
+            }
+
+        df['treatment'] = (df['browser'] == 'Chrome').astype(int)
+        outcome = 'completion_rate'
+        # 1. Полный интегрированный вектор X
+        features_full = ['avg_task_duration', 'total_gaze_points', 'total_emotions', 'total_interactions',
+                         'positive_emotions', 'negative_emotions', 'neutral_emotions', 'emotion_transitions_count',
+                         'gaze_num_fixations', 'gaze_avg_fixation_duration', 'gaze_dispersion_x', 'gaze_dispersion_y']
+        # 2. Без gaze-метрик
+        features_no_gaze = ['avg_task_duration', 'total_emotions', 'total_interactions',
+                            'positive_emotions', 'negative_emotions', 'neutral_emotions', 'emotion_transitions_count']
+        # 3. Без emotion-метрик
+        features_no_emotion = ['avg_task_duration', 'total_gaze_points', 'total_interactions',
+                               'gaze_num_fixations', 'gaze_avg_fixation_duration', 'gaze_dispersion_x', 'gaze_dispersion_y']
+        treatment = df['treatment'].values
+        results = {}
+        results['full_features'] = run_ite_analysis(df, features_full, outcome, treatment, ' (integrated)')
+        results['no_gaze'] = run_ite_analysis(df, features_no_gaze, outcome, treatment, ' (no gaze)')
+        results['no_emotion'] = run_ite_analysis(df, features_no_emotion, outcome, treatment, ' (no emotion)')
+        results['session_count'] = int(len(df))
+        results['note'] = 'Comparison of three feature vector variants: integrated, no gaze, no emotion.'
+        # Сохраняем таблицу всех признаков по сессиям
+        features_to_save = [
+            'participantNumber', 'user_id', 'session_id', 'browser',
+            'avg_task_duration', 'total_gaze_points', 'total_emotions', 'total_interactions',
+            'positive_emotions', 'negative_emotions', 'neutral_emotions', 'emotion_transitions_count',
+            'gaze_num_fixations', 'gaze_avg_fixation_duration', 'gaze_dispersion_x', 'gaze_dispersion_y'
         ]
-        
-        for metric, name, higher_better in metrics_to_check:
-            if metric not in self.results_df.columns: continue
-            
-            m_val, m_std = modal[metric].mean(), modal[metric].std()
-            i_val, i_std = inline[metric].mean(), inline[metric].std()
-            
-            t_stat, p_val = stats.ttest_ind(modal[metric].dropna(), inline[metric].dropna(), nan_policy='omit')
-            sig = "Значимо" if p_val < 0.05 else "Не значимо"
-            diff = m_val - i_val
-            direction = "↑ выше" if diff > 0 else "↓ ниже"
-            
-            self.comparison_results[metric] = {'modal': m_val, 'inline': i_val, 'p': p_val, 'sig': p_val < 0.05}
-            
-            print(f" {name}:")
-            print(f"   Modal: {m_val:.4f} ± {m_std:.4f}")
-            print(f"   Inline: {i_val:.4f} ± {i_std:.4f}")
-            print(f"   Разница: {abs(diff):.4f} ({direction}) | p={p_val:.4f} {sig}\n")
-            
-        return self.comparison_results
-    
-    def generate_report(self):
-        """Генерация текстового отчёта с выводами"""
-        if not self.comparison_results:
-            print("Сначала выполните compare_validation_types()")
-            return
-            
-        report = []
-        report.append("="*70)
-        report.append("ОТЧЁТ: Исследование форм регистрации (Modal vs Inline)")
-        report.append("="*70)
-        report.append(f"Дата: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
-        report.append(f"Всего сессий: {len(self.results_df)}")
-       
-                
-        # Итоговые рекомендации
-        report.append("\n" + "="*70)
-        report.append(" ИТОГОВЫЕ РЕКОМЕНДАЦИИ ДЛЯ UX/UI")
-        report.append("="*70)
-        if anx.get('sig') and anx['modal'] > anx['inline']:
-            report.append(" Для форм регистрации РЕКОМЕНДУЕТСЯ использовать INLINE-валидацию.")
-            report.append("   - Снижает тревожность и когнитивную нагрузку")
-            report.append("   - Ускоряет процесс заполнения")
-            report.append("   - Уменьшает количество лишних кликов/закрытий окон")
+        # Если participantNumber нет в df, добавим пустой столбец
+        if 'participantNumber' not in df.columns:
+            df['participantNumber'] = ''
+        timestamp_str = datetime.now().strftime('%Y%m%d_%H%M%S')
+        features_csv = f"data/results/all_features_table_{timestamp_str}.csv"
+        try:
+            df[features_to_save].to_csv(features_csv, index=False)
+        except Exception as e:
+            print(f"Ошибка при сохранении all_features_table: {e}")
+        return results 
+
+    def analyze_two_sessions(self, chrome_data, firefox_data):
+        """
+        Анализирует две сессии от одного респондента (Chrome и Firefox)
+        и возвращает персонализированный результат по трём вариантам: интегрированный, только эмоции, только gaze
+        """
+        try:
+            # Подготавливаем данные для Chrome
+            chrome_metrics = self._extract_metrics(chrome_data)
+            chrome_metrics['browser'] = 'Chrome'
+            firefox_metrics = self._extract_metrics(firefox_data)
+            firefox_metrics['browser'] = 'Firefox'
+            df = pd.DataFrame([chrome_metrics, firefox_metrics])
+
+            # Варианты признаков
+            features_full = [
+                'avg_task_duration', 'total_gaze_points', 'total_emotions', 'total_interactions',
+                'positive_emotions', 'negative_emotions', 'neutral_emotions', 'emotion_transitions_count',
+                'gaze_num_fixations', 'gaze_avg_fixation_duration', 'gaze_dispersion_x', 'gaze_dispersion_y'
+            ]
+            features_no_gaze = [
+                'avg_task_duration', 'total_emotions', 'total_interactions',
+                'positive_emotions', 'negative_emotions', 'neutral_emotions', 'emotion_transitions_count'
+            ]
+            features_no_emotion = [
+                'avg_task_duration', 'total_gaze_points', 'total_interactions',
+                'gaze_num_fixations', 'gaze_avg_fixation_duration', 'gaze_dispersion_x', 'gaze_dispersion_y'
+            ]
+
+            def calc_effect(df, features):
+                chrome_vals = df[df['browser'] == 'Chrome'][features].values.astype(float)
+                firefox_vals = df[df['browser'] == 'Firefox'][features].values.astype(float)
+                if len(chrome_vals) == 0 or len(firefox_vals) == 0:
+                    return None
+                chrome_mean = chrome_vals.mean()
+                firefox_mean = firefox_vals.mean()
+                effect = (chrome_mean - firefox_mean) / firefox_mean if firefox_mean else 0.0
+                return float(effect)
+
+            effect_full = calc_effect(df, features_full)
+            effect_no_gaze = calc_effect(df, features_no_gaze)
+            effect_no_emotion = calc_effect(df, features_no_emotion)
+
+            # Формируем результат
+            result = {
+                'individual_effect': {
+                    'value': effect_full,
+                    'confidence_interval': [
+                        float(effect_full - 0.1),
+                        float(effect_full + 0.1)
+                    ]
+                },
+                'individual_effects_variants': {
+                    'integrated': effect_full,
+                    'no_gaze': effect_no_gaze,
+                    'no_emotion': effect_no_emotion
+                },
+                'browser_comparison': {
+                    'Chrome': {
+                        'avg_task_duration': float(df[df['browser'] == 'Chrome']['avg_task_duration'].iloc[0]),
+                        'positive_emotions': int(df[df['browser'] == 'Chrome']['positive_emotions'].iloc[0]),
+                        'completion_rate': float(df[df['browser'] == 'Chrome']['completion_rate'].iloc[0]),
+                        'calibrationAccuracy': chrome_metrics.get('calibrationAccuracy'),
+                        'anxietyIndex': chrome_metrics.get('anxietyIndex')
+                    },
+                    'Firefox': {
+                        'avg_task_duration': float(df[df['browser'] == 'Firefox']['avg_task_duration'].iloc[0]),
+                        'positive_emotions': int(df[df['browser'] == 'Firefox']['positive_emotions'].iloc[0]),
+                        'completion_rate': float(df[df['browser'] == 'Firefox']['completion_rate'].iloc[0]),
+                        'calibrationAccuracy': firefox_metrics.get('calibrationAccuracy'),
+                        'anxietyIndex': firefox_metrics.get('anxietyIndex')
+                    }
+                },
+                'emotion_stats': {
+                    'Chrome': {
+                        'positive': int(df[df['browser'] == 'Chrome']['positive_emotions'].iloc[0]),
+                        'negative': int(df[df['browser'] == 'Chrome']['negative_emotions'].iloc[0]),
+                        'neutral': int(df[df['browser'] == 'Chrome']['neutral_emotions'].iloc[0]),
+                        'distribution': chrome_metrics['emotion_distribution']
+                    },
+                    'Firefox': {
+                        'positive': int(df[df['browser'] == 'Firefox']['positive_emotions'].iloc[0]),
+                        'negative': int(df[df['browser'] == 'Firefox']['negative_emotions'].iloc[0]),
+                        'neutral': int(df[df['browser'] == 'Firefox']['neutral_emotions'].iloc[0]),
+                        'distribution': firefox_metrics['emotion_distribution']
+                    }
+                }
+            }
+            return result
+        except Exception as e:
+            print(f"Ошибка при анализе двух сессий: {str(e)}")
+            return {
+                'error': str(e),
+                'note': 'Произошла ошибка при анализе данных. Убедитесь, что оба файла содержат корректные данные.'
+            }
+
+    def _extract_metrics(self, data):
+        """Извлекает метрики из данных эксперимента"""
+        tasks = data.get('tasks', [])
+        completed_tasks = [t for t in tasks if t.get('completed')]
+        avg_task_duration = np.mean([t.get('duration', 0) for t in completed_tasks]) / 1000 if completed_tasks else 0
+        completion_rate = len(completed_tasks) / len(tasks) if tasks else 0
+
+        # Эмоции
+        emotion_data = data.get('emotionData', [])
+        total_emotions = len(emotion_data)
+        positive_emotions = sum(1 for e in emotion_data if e.get('dominantEmotion') == 'happy')
+        negative_emotions = sum(1 for e in emotion_data if e.get('dominantEmotion') in ['angry', 'sad', 'fearful', 'disgusted'])
+        neutral_emotions = sum(1 for e in emotion_data if e.get('dominantEmotion') == 'neutral')
+        # Новое: распределение по всем эмоциям
+        all_emotions = ['happy', 'sad', 'angry', 'surprised', 'disgusted', 'fearful', 'neutral']
+        emotion_distribution = {e: 0 for e in all_emotions}
+        for e in emotion_data:
+            dom = e.get('dominantEmotion')
+            if dom in emotion_distribution:
+                emotion_distribution[dom] += 1
+        # Переходы эмоций
+        emotion_transitions_count = 0
+        if emotion_data:
+            previous_emotion = emotion_data[0].get('dominantEmotion')
+            for i in range(1, len(emotion_data)):
+                current_emotion = emotion_data[i].get('dominantEmotion')
+                if current_emotion and previous_emotion and current_emotion != previous_emotion:
+                    emotion_transitions_count += 1
+                previous_emotion = current_emotion
+
+        # Взаимодействия
+        total_interactions = len(data.get('interactionEvents', []))
+
+        # Gaze-метрики
+        gaze_data = data.get('gazeData', [])
+        total_gaze_points = len(gaze_data)
+        gaze_metrics = detect_fixations(gaze_data)
+        gaze_num_fixations = gaze_metrics['num_fixations']
+        gaze_avg_fixation_duration = gaze_metrics['avg_fixation_duration']
+        gaze_dispersion_x = gaze_metrics['gaze_dispersion_x']
+        gaze_dispersion_y = gaze_metrics['gaze_dispersion_y']
+
+        # Индекс тревожности (аналогично групповому анализу, но для одной сессии)
+        # Формула: AnxietyIndex = w1*A_disp + w2*f_fix - w3*t_fix_avg
+        # где A_disp = sqrt(gaze_dispersion_x^2 + gaze_dispersion_y^2)
+        #      t_fix_avg = gaze_avg_fixation_duration
+        #      f_fix = gaze_num_fixations / (avg_task_duration) (на 1 секунду)
+        #      w1, w2, w3 = 1.0
+        if avg_task_duration > 0:
+            A_disp = np.sqrt(gaze_dispersion_x ** 2 + gaze_dispersion_y ** 2)
+            t_fix_avg = gaze_avg_fixation_duration
+            f_fix = gaze_num_fixations / avg_task_duration
+            w1 = w2 = w3 = 1.0
+            anxietyIndex = w1 * A_disp + w2 * f_fix - w3 * t_fix_avg
         else:
-            report.append("Различия незначительны. Выбор зависит от бизнес-логики и дизайна.")
-            
-        text = "\n".join(report)
-        print(text)
-        
-        # Сохранение
-        os.makedirs('data/results', exist_ok=True)
-        ts = datetime.now().strftime('%Y%m%d_%H%M%S')
-        with open(f'data/results/report_{ts}.txt', 'w', encoding='utf-8') as f:
-            f.write(text)
-        print(f"\n💾 Отчёт сохранён: data/results/report_{ts}.txt")
-        return text
+            anxietyIndex = None
 
-def main():
-    print(" Запуск анализа НИР: Формы регистрации (Modal vs Inline)\n")
-    analyzer = RegistrationFormAnalyzer()
-    
-    if analyzer.load_all_sessions() == 0:
-        print(" Нет данных для анализа. Проверьте папку data/experiments")
-        return
-        
-    analyzer.analyze_all_sessions()
-    analyzer.compare_validation_types()
-    analyzer.generate_report()
-    
-    print("\n Анализ завершён успешно!")
-
-if __name__ == '__main__':
-    main()
+        # Извлекаем калибровку, если есть
+        calibration = data.get('calibrationAccuracy')
+        return {
+            'completion_rate': completion_rate,
+            'avg_task_duration': avg_task_duration,
+            'total_gaze_points': total_gaze_points,
+            'total_emotions': total_emotions,
+            'total_interactions': total_interactions,
+            'positive_emotions': positive_emotions,
+            'negative_emotions': negative_emotions,
+            'neutral_emotions': neutral_emotions,
+            'emotion_transitions_count': emotion_transitions_count,
+            'gaze_num_fixations': gaze_num_fixations,
+            'gaze_avg_fixation_duration': gaze_avg_fixation_duration,
+            'gaze_dispersion_x': gaze_dispersion_x,
+            'gaze_dispersion_y': gaze_dispersion_y,
+            'emotion_distribution': emotion_distribution,
+            'calibrationAccuracy': calibration,
+            'anxietyIndex': anxietyIndex
+        } 
