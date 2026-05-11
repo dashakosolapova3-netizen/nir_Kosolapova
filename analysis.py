@@ -40,7 +40,7 @@ class RegistrationFormAnalyzer:
             except Exception as e:
                 print(f"Ошибка загрузки {filename}: {e}")
                 
-        print(f"Загружено 78 сессий")
+        print(f"Загружено  {len(self.sessions_data)}  сессий")
         return len(self.sessions_data)
     
     def classify_session(self, session):
@@ -280,7 +280,7 @@ class RegistrationFormAnalyzer:
         report.append("ОТЧЁТ: Исследование форм регистрации (Modal vs Inline)")
         report.append("="*70)
         report.append(f"Дата: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
-        report.append(f"Всего сессий: 78")
+        report.append(f"Всего сессий: {len(self.results_df)}")
        
                 
         # Итоговые рекомендации
