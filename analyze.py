@@ -269,42 +269,6 @@ class RegistrationFormAnalyzer:
             
         return self.comparison_results
     
-    def generate_report(self):
-        """Генерация текстового отчёта с выводами"""
-        if not self.comparison_results:
-            print("Сначала выполните compare_validation_types()")
-            return
-            
-        report = []
-        report.append("="*70)
-        report.append("ОТЧЁТ: Исследование форм регистрации (Modal vs Inline)")
-        report.append("="*70)
-        report.append(f"Дата: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
-        report.append(f"Всего сессий: {len(self.results_df)}")
-       
-                
-        # Итоговые рекомендации
-        report.append("\n" + "="*70)
-        report.append(" ИТОГОВЫЕ РЕКОМЕНДАЦИИ ДЛЯ UX/UI")
-        report.append("="*70)
-        if anx.get('sig') and anx['modal'] > anx['inline']:
-            report.append(" Для форм регистрации РЕКОМЕНДУЕТСЯ использовать INLINE-валидацию.")
-            report.append("   - Снижает тревожность и когнитивную нагрузку")
-            report.append("   - Ускоряет процесс заполнения")
-            report.append("   - Уменьшает количество лишних кликов/закрытий окон")
-        else:
-            report.append("Различия незначительны. Выбор зависит от бизнес-логики и дизайна.")
-            
-        text = "\n".join(report)
-        print(text)
-        
-        # Сохранение
-        os.makedirs('data/results', exist_ok=True)
-        ts = datetime.now().strftime('%Y%m%d_%H%M%S')
-        with open(f'data/results/report_{ts}.txt', 'w', encoding='utf-8') as f:
-            f.write(text)
-        print(f"\n💾 Отчёт сохранён: data/results/report_{ts}.txt")
-        return text
 
 def main():
     print(" Запуск анализа НИР: Формы регистрации (Modal vs Inline)\n")
@@ -316,7 +280,6 @@ def main():
         
     analyzer.analyze_all_sessions()
     analyzer.compare_validation_types()
-    analyzer.generate_report()
     
     print("\n Анализ завершён успешно!")
 
