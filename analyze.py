@@ -6,6 +6,7 @@ from datetime import datetime
 from scipy import stats
 import warnings
 import gdown
+import zipfile
 
 warnings.filterwarnings('ignore')
 
@@ -230,7 +231,6 @@ class RegistrationFormAnalyzer:
         print("\n" + "="*70)
         print("Сравнение: модальная и Инлайн реализация")
         print("="*70)
-        print(f"Modal: {len(modal)} участников | Inline: {len(inline)} участников\n")
 
         metrics_to_check = [
             ('avg_anxiety', ' Индекс Тревожности', False),
@@ -268,13 +268,16 @@ class RegistrationFormAnalyzer:
 def main():
     FILE_ID = '1LrhigFYD2elu_O-L7kSUVVa37QBa8uip'
     ZIP_NAME = 'data.zip'
-
-    if not os.path.exists('data/experiments'):
+    EXTRACT_DIR = 'data/experiments'
+    os.makedirs(EXTRACT_DIR, exist_ok=True)
+    if not os.listdir(EXTRACT_DIR):
         url = f'https://drive.google.com/uc?id={FILE_ID}'
         gdown.download(url, ZIP_NAME, quiet=False)
-        os.system(f'unzip -o {ZIP_NAME}')
 
         if os.path.exists(ZIP_NAME):
+            print("Распаковка архива")
+            with zipfile.ZipFile(ZIP_NAME, 'r') as zip_ref:
+                zip_ref.extractall(EXTRACT_DIR)
             os.remove(ZIP_NAME)
 
     print(" Запуск анализа НИР: Формы регистрации (Modal vs Inline)\n")
